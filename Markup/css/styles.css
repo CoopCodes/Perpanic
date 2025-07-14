@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Canterbury';
+  src: url('../fonts/Canterbury.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Canterbury', serif;
+  }
+}
+
+@layer components {
+  .h1 {
+    @apply text-[5.625rem] md:text-[6.25rem] lg:text-[12.5rem];
+  }
+} 
+
