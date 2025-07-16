@@ -144,11 +144,14 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="container bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] py-[15] relative">
+      <div className="container bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] py-[13rem] relative">
         {/* Absolute positioned content stays on top */}
-        <div className="flex-col gap-1.5 my-auto absolute top-1/2 translate-y-[-50%] lg:ml-24 z-10">
-          <SVGFilter animate={true}>
-            <h2 className='h2'>merch</h2>
+        <div className="flex-col gap-1.5 my-auto absolute top-1/2 translate-y-[-50%] xl:ml-24 z-100 bg-textured">
+          <SVGFilter animate={true}template={{
+            ...defaultSVGFilterTemplate,
+            scale: 3,
+          }}>
+            <h2 className='h2 leading-none'>merch</h2>
           </SVGFilter>
           <SVGFilter animate={true} template={{
             ...defaultSVGFilterTemplate,
@@ -160,11 +163,9 @@ function App() {
             </a>
           </SVGFilter>
         </div>
-
-        <div className="w-full h-full flex items-center overflow-hidden">
-          <div className="ticker-container w-full h-full flex items-center horizontal-textured-connector">
+        <div className="flex items-center overflow-hidden absolute h-fit w-[100vw] right-1/2 translate-x-[50%]">
+          <div className="ticker-container w-full h-full flex items-center horizontal-textured-connector-lg relative">
             <div className="ticker-content flex animate-scroll gap-10">
-              {/* First set of merch items */}
               <img src="/Merch Image.png" alt="Merch Item 1" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
               <img src="/Merch Image.png" alt="Merch Item 2" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
               <img src="/Merch Image.png" alt="Merch Item 3" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
@@ -174,7 +175,6 @@ function App() {
               <img src="/Merch Image.png" alt="Merch Item 7" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
               <img src="/Merch Image.png" alt="Merch Item 8" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
               
-              {/* Duplicate set for seamless infinite scroll */}
               <img src="/Merch Image.png" alt="Merch Item 1" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
               <img src="/Merch Image.png" alt="Merch Item 2" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
               <img src="/Merch Image.png" alt="Merch Item 3" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />

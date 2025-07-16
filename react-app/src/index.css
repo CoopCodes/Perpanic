@@ -48,7 +48,7 @@
   }
 
   .container {
-    @apply mx-auto max-w-[330px] sm:max-w-[668px] lg:max-w-[1200px];
+    @apply mx-auto sm:max-w-[668px] lg:max-w-[1200px];
   }
 
   .main-content {
@@ -70,7 +70,8 @@
       rgba(0, 0, 0, 0.35)), 
       url('/foreground-texture.jpg'), 
       linear-gradient(black, black);
-    background-size: cover;
+    background-size: contain;
+    background-repeat: repeat;
   }
   
   .top-textured-connector::after {
@@ -91,33 +92,90 @@
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
 
-    --bg-color: rgb(40, 40, 40);
+    --bg-color: rgb(65, 65, 65);
 
     background-image: 
-      linear-gradient(rgba(40, 40, 40, 0.35), 
-      rgba(40, 40, 40, 0.35)), 
+      linear-gradient(rgba(65, 65, 65, 0.35), 
+      rgba(65, 65, 65, 0.35)), 
       url('/foreground-texture.jpg'), 
       linear-gradient(var(--bg-color), var(--bg-color));
-    background-size: cover;
+    background-size: contain;
+    background-repeat: repeat;
   }
 
-  .horizontal-textured-connector::before {
-    @apply absolute left-0 top-0 bottom-0 w-[200px];
+  .horizontal-textured-connector::before,
+  .horizontal-textured-connector::after,
+  .horizontal-textured-connector-lg::before,
+  .horizontal-textured-connector-lg::after {
+    @apply absolute top-0 bottom-0 w-[200px];
     content: '';
     height: 100%;
     pointer-events: none;
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    --bg-color: rgb(0, 0, 0);
+    background-image: 
+      linear-gradient(rgba(32, 32, 32, 0.7), 
+      rgba(32, 32, 32, 0.7)), 
+      url('/foreground-texture.jpg'), 
+      linear-gradient(var(--bg-color), var(--bg-color));
+    background-size: cover, cover, 100vw 100vh;
+    z-index: 10;
+  }
+
+  .horizontal-textured-connector::before,
+  .horizontal-textured-connector-lg::before {
+    @apply left-0 w-[35vw];
     mask-image: linear-gradient(
       to right,
-      black, 
+      black 40%, 
       transparent
     );
     -webkit-mask-image: linear-gradient(
       to right,
-      black, 
+      black 40%, 
       transparent
     );
+  }
+
+  .horizontal-textured-connector::after,
+  .horizontal-textured-connector-lg::after {
+    @apply right-0;
+    mask-image: linear-gradient(
+      to left,
+      black 20%, 
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to left,
+      black 20%, 
+      transparent
+    );
+  }
+
+  @media (max-width: 1023px) {
+    .horizontal-textured-connector-lg::before,
+    .horizontal-textured-connector-lg::after {
+      display: none;
+    }
+  }
+
+  /*   
+  .bg-textured::before {
+    @apply absolute inset-[-3rem] top-[-2rem];
+    content: '';
+    mask-image: radial-gradient(
+      rgba(40, 40, 40, 0.4) 40%,
+      rgba(40, 40, 40, 0) 100%,
+      rgba(40, 40, 40, 0.4) 40%
+    );
+    -webkit-mask-image: radial-gradient(
+      rgba(40, 40, 40, 0.4) 40%,
+      rgba(40, 40, 40, 0) 100%,
+      rgba(40, 40, 40, 0.4) 40%
+    );
     
-    mask-size: 100% 100%;
+    mask-size: cover;
     mask-repeat: no-repeat;
 
     --bg-color: rgb(40, 40, 40);
@@ -128,39 +186,7 @@
       url('/foreground-texture.jpg'), 
       linear-gradient(var(--bg-color), var(--bg-color));
     background-size: cover;
-    z-index: 10;
-  }
-
-  .horizontal-textured-connector::after {
-    @apply absolute right-0 top-0 bottom-0 w-[200px];
-    content: '';
-    height: 100%;
-    pointer-events: none;
-    mask-image: linear-gradient(
-      to left,
-      black, 
-      transparent
-    );
-    -webkit-mask-image: linear-gradient(
-      to left,
-      black, 
-      transparent
-    );
-    
-    mask-size: 100% 100%;
-    mask-repeat: no-repeat;
-
-    --bg-color: rgb(40, 40, 40);
-
-    background-image: 
-      linear-gradient(rgba(40, 40, 40, 0.35), 
-      rgba(40, 40, 40, 0.35)), 
-      url('/foreground-texture.jpg'), 
-      linear-gradient(var(--bg-color), var(--bg-color));
-    background-size: cover;
-    z-index: 10;
-  }
-  
+  } */
 }
 
 
