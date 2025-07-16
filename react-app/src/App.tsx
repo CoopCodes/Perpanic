@@ -1,89 +1,106 @@
 import './index.css'
 import logo from './assets/perpanic-logo.svg'
 import arrowShort from './assets/Arrow Short.svg'
-import { useRef, useEffect, useState } from 'react'
+import arrow from './assets/arrow.svg'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { SVGFilter, defaultSVGFilterTemplate } from './components/SVGFilter'
 
 function App() {
   const linksRef = useRef<HTMLDivElement>(null)
+  const animationFrameRef = useRef<number | undefined>(undefined)
   const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseLinkIndex, setMouseLinkIndex] = useState(-1);
   const [mouseDistanceFromLink, setMouseDistanceFromLink] = useState(0);
 
+  const updateMouseInteraction = useCallback((mouseX: number, mouseY: number) => {
+    const links = linksRef.current;
+    if (!links) return;
+
+    const { top, height } = links.getBoundingClientRect();
+    const linkHeight = height / links.children.length;
+
+    // Calculate which link the mouse is over
+    let newMouseLinkIndex = -1;
+    if (mouseY < top + linkHeight) newMouseLinkIndex = 0;
+    else if (mouseY > top + linkHeight && mouseY < top + (linkHeight * 2)) newMouseLinkIndex = 1;
+    else if (mouseY > top + (linkHeight * 2)) newMouseLinkIndex = 2;
+
+    // Calculate distance to link
+    let distanceToLink = 0;
+    if (newMouseLinkIndex !== -1) {
+      const link = (links.children[newMouseLinkIndex] as HTMLDivElement)?.getBoundingClientRect();
+      if (link) {
+        const linkCenterX = link.left + link.width / 2;
+        const linkCenterY = link.top + link.height / 2;
+        distanceToLink = Math.sqrt(Math.pow(mouseX - linkCenterX, 2) + Math.pow(mouseY - linkCenterY, 2));
+      }
+    }
+
+    // Batch all DOM updates in one frame
+    const arrows = Array.from(links.children).map(child => child.children[0]);
+    const linkElements = Array.from(links.children);
+
+    arrows.forEach((arrow, index) => {
+      const arrowElement = arrow as HTMLImageElement;
+      arrowElement.style.opacity = index !== newMouseLinkIndex || distanceToLink < 100 ? "0" : "1";
+    });
+
+    linkElements.forEach((link, index) => {
+      const linkElement = (link as HTMLAnchorElement);
+      if (newMouseLinkIndex === index) linkElement.classList.add("lg:underline");
+      else linkElement.classList.remove("lg:underline");
+    });
+
+    // Update arrow rotation if hovering over a link
+    if (newMouseLinkIndex !== -1) {
+      const arrow = arrows[newMouseLinkIndex] as HTMLImageElement;
+      const arrowRect = arrow.getBoundingClientRect();
+      const arrowCenterX = arrowRect.left + arrowRect.width / 2;
+      const arrowCenterY = arrowRect.top + arrowRect.height / 2;
+      
+      const angle = Math.atan2(
+        mouseY - arrowCenterY,
+        mouseX - arrowCenterX
+      ) * (180 / Math.PI);
+
+      if (angle < -100 || angle > 100) {
+        arrow.style.rotate = `${angle}deg`;
+      } else {
+        arrow.style.opacity = "0";
+      }
+    }
+
+    // Update state (this will trigger React re-render)
+    setMousePosition({ x: mouseX, y: mouseY });
+    setMouseLinkIndex(newMouseLinkIndex);
+    setMouseDistanceFromLink(distanceToLink);
+  }, [setMousePosition, setMouseLinkIndex, setMouseDistanceFromLink]);
+
   useEffect(() => {
     function handleMouseMove(e: MouseEvent) {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-      const distanceToLink = getMouseDistanceFromLink(e.clientX, e.clientY);
-      setArrowRotation(e.clientX, e.clientY, distanceToLink);
+      // Cancel any pending animation frame
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      
+      // Schedule the update for the next frame
+      animationFrameRef.current = requestAnimationFrame(() => {
+        updateMouseInteraction(e.clientX, e.clientY);
+      });
     }
     
     window.addEventListener("mousemove", handleMouseMove);
     
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
-  }, [mouseLinkIndex]);
+  }, [updateMouseInteraction]);
   
-  const getMouseDistanceFromLink = (mouseX: number, mouseY: number) => {
-    const link = (linksRef.current?.children[mouseLinkIndex] as HTMLDivElement)?.getBoundingClientRect();
-
-    if (link) {
-      const distance = Math.sqrt(Math.pow(mouseX - link.left, 2) + Math.pow(mouseY - link.top, 2));
-      setMouseDistanceFromLink(distance);
-      return distance;
-    }
-    
-    return 0;
-  }
-
-  const setArrowRotation = (mouseX: number, mouseY: number, distanceToLink: number) => {
-    const links = linksRef.current;
-    if (!links) return;
-
-    const { top, height } = links.getBoundingClientRect();
-    
-    const linkHeight = height / links.children.length;
-
-    let newMouseLinkIndex = mouseLinkIndex;
-
-    if (mouseY < top + linkHeight) newMouseLinkIndex = 0;
-    else if (mouseY > top + linkHeight && mouseY < top + (linkHeight * 2)) newMouseLinkIndex = 1;
-    else if (mouseY > top + (linkHeight * 2)) newMouseLinkIndex = 2;
-    else newMouseLinkIndex = -1;
-
-    setMouseLinkIndex(newMouseLinkIndex);
-
-    const arrows = Array.from(links.children).map(child => child.children[0]);
-    arrows.map((arrow, index) => {
-      const arrowElement = arrow as HTMLImageElement;
-      arrowElement.style.opacity = index !== newMouseLinkIndex || distanceToLink < 60 ? "0" : "1";
-    });
-    
-    Array.from(links.children).map((link, index) => {
-      const linkElement = (link as HTMLAnchorElement);
-      if (newMouseLinkIndex === index) linkElement.classList.add("lg:underline");
-      else linkElement.classList.remove("lg:underline");
-    });
-    
-    if (newMouseLinkIndex !== -1) {
-      let arrow = (arrows[newMouseLinkIndex] as HTMLDivElement) as HTMLImageElement;
-      
-      const arrowCenterX = arrow.getBoundingClientRect().left + arrow.getBoundingClientRect().width / 2
-      const arrowCenterY = arrow.getBoundingClientRect().top + arrow.getBoundingClientRect().height / 2
-      
-      const angle = Math.atan2(
-        mouseY - arrowCenterY,
-        mouseX - arrowCenterX
-      ) * (180 / Math.PI)
-
-      if (angle < -100 || angle > 100) 
-        arrow.style.rotate = `${angle}deg`;
-      else arrow.style.opacity = "0";
-    }
-  }
-
   const calcLinkScale = () => {
-    return Math.min(Math.max((500 / mouseDistanceFromLink), 2.5), 5);
+    return Math.min(Math.max((800 / (mouseDistanceFromLink - 80)), 2.5), 100);
   }
 
   return (
@@ -127,8 +144,21 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="container bg-textured-black top-textured-connector h-[100vh]">
-
+      <div className="container bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] py-[17.8125rem] relative">
+        <div className="flex-col gap-1.5 my-auto absolute top-1/2 translate-y-[-50%] lg:ml-24">
+          <SVGFilter animate={true}>
+            <h2 className='h2'>merch</h2>
+          </SVGFilter>
+          <SVGFilter animate={true} template={{
+            ...defaultSVGFilterTemplate,
+            scale: 2.2,
+          }}>
+            <a className="flex gap-4 items-center group" href="#">
+                <p className="subheading underline">see the collection</p>
+                <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
+            </a>
+          </SVGFilter>
+        </div>
       </div>
     </div>
   )

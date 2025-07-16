@@ -12,54 +12,43 @@
     font-family: 'Canterbury', serif;
     color: white;
     overflow-x: hidden;
+    line-height: 1;
   }
 }
 
 @layer components {
   .h1 {
-    /* Base: 90px * -0.04 = -3.6px */
-    /* MD: 100px * -0.04 = -4px */
-    /* LG: 200px * -0.04 = -8px */
-    @apply text-[5.625rem] tracking-[-0.225rem] md:text-[6.25rem] md:tracking-[-0.25rem] lg:text-[12.5rem] lg:tracking-[-0.5rem];
+    /* tracking: -0.04em for all breakpoints */
+    @apply text-[5.625rem] tracking-[-.04em] md:text-[6.25rem] lg:text-[12.5rem];
   }
 
   .h2 {
-    /* Base: 60px * -0.04 = -2.4px */
-    /* MD: 72px * -0.04 = -2.88px */
-    /* LG: 140px * -0.04 = -5.6px */
-    @apply text-[3.75rem] tracking-[-0.15rem] md:text-[4.5rem] md:tracking-[-0.18rem] lg:text-[8.75rem] lg:tracking-[-0.35rem];
+    /* tracking: -0.04em for all breakpoints */
+    @apply text-[3.75rem] tracking-[-.04em] md:text-[4.5rem] lg:text-[8.75rem];
   }
 
   .h3 {
-    /* Base: 32px * -0.04 = -1.28px */
-    /* MD: 44px * -0.04 = -1.76px */
-    /* LG: 84px * -0.04 = -3.36px */
-    @apply text-[2rem] tracking-[-0.08rem] md:text-[2.75rem] md:tracking-[-0.11rem] lg:text-[5.25rem] lg:tracking-[-0.21rem];
+    /* tracking: -0.04em for all breakpoints */
+    @apply text-[2rem] tracking-[-.04em] md:text-[2.75rem] lg:text-[5.25rem];
   }
 
   .large-link {
-    /* Base: 36px * -0.04 = -1.44px */
-    /* MD: 54px * -0.04 = -2.16px */
-    /* LG: 78px * -0.04 = -3.12px */
-    @apply hover:underline leading-[100%] text-[2.25rem] tracking-[-0.09rem] md:text-[3.375rem] md:tracking-[-0.16rem] lg:text-[4rem] lg:tracking-[-0.17rem];
+    /* tracking: -0.04em for all breakpoints */
+    @apply hover:underline leading-[100%] text-[2.25rem] tracking-[-.04em] md:text-[3.375rem] lg:text-[4rem];
   }
 
   .subheading {
-    /* Base: 40px * -0.04 = -1.6px */
-    /* MD: 20px * -0.04 = -0.8px */
-    /* LG: 20px * -0.04 = -0.8px */
-    @apply leading-[100%] text-[2.5rem] tracking-[-0.1rem] md:text-[1.25rem] md:tracking-[-0.05rem] lg:text-[1.25rem] lg:tracking-[-0.05rem];
+    /* tracking: -0.04em for all breakpoints */
+    @apply leading-[100%] text-[1.25rem] tracking-[-.04em] md:text-[1.25rem] lg:text-[2rem];
   }
 
   .p1 {
-    /* Base: 28px * -0.04 = -1.12px */
-    /* MD: 16px * -0.04 = -0.64px */
-    /* LG: 16px * -0.04 = -0.64px */
-    @apply leading-[120%] text-[1.75rem] tracking-[-0.07rem] md:text-[1rem] md:tracking-[-0.04rem] lg:text-[1rem] lg:tracking-[-0.04rem];
+    /* tracking: -0.04em for all breakpoints */
+    @apply leading-[120%] text-[1.75rem] tracking-[-.04em] md:text-[1rem] lg:text-[1rem];
   }
 
   .container {
-    @apply sm:mx-auto max-w-[330px] sm:max-w-[668px] lg:max-w-[1200px];
+    @apply mx-auto max-w-[330px] sm:max-w-[668px] lg:max-w-[1200px];
   }
 
   .main-content {
@@ -75,6 +64,7 @@
     content: '';
     width: 110vw;
     transform: translateX(-50%);
+    pointer-events: none;
     background-image: 
       linear-gradient(rgba(0, 0, 0, 0.35), 
       rgba(0, 0, 0, 0.35)), 
@@ -88,6 +78,7 @@
     content: '';
     width: 110vw;
     transform: translateX(-50%);
+    pointer-events: none;
     mask-image: linear-gradient(
       transparent, 
       black
@@ -108,5 +99,9 @@
       url('/foreground-texture.jpg'), 
       linear-gradient(var(--bg-color), var(--bg-color));
     background-size: cover;
+    }
+
   }
-}
+/* Override Tailwind v4's hover media query behavior */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (&:is(:where(.group):hover *));

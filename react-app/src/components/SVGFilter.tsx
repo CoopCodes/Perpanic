@@ -22,10 +22,11 @@ interface SVGFilterProps {
   children?: ReactNode,
   className?: string,
   template?: SVGFilterTemplate
-  animate?: boolean
+  animate?: boolean,
+  scale?: number | undefined,
 }
 
-export function SVGFilter({ children, className, template = defaultSVGFilterTemplate, animate = false }: SVGFilterProps) {
+export function SVGFilter({ children, className, scale, template = defaultSVGFilterTemplate, animate = false  }: SVGFilterProps) {
   const [currentSeed, setCurrentSeed] = useState(0)
   const filterId = useRef(`filter-${crypto.randomUUID()}`).current
 
@@ -72,7 +73,7 @@ export function SVGFilter({ children, className, template = defaultSVGFilterTemp
                 seed={animate ? currentSeed : 0}
               />
               <feDisplacementMap
-                scale={template.scale}
+                scale={scale ?? template.scale}
                 result="result5"
                 xChannelSelector="R"
                 in="SourceGraphic"
