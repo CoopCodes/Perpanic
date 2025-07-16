@@ -144,8 +144,9 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="container bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] py-[17.8125rem] relative">
-        <div className="flex-col gap-1.5 my-auto absolute top-1/2 translate-y-[-50%] lg:ml-24">
+      <div className="container bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] py-[15] relative">
+        {/* Absolute positioned content stays on top */}
+        <div className="flex-col gap-1.5 my-auto absolute top-1/2 translate-y-[-50%] lg:ml-24 z-10">
           <SVGFilter animate={true}>
             <h2 className='h2'>merch</h2>
           </SVGFilter>
@@ -158,6 +159,32 @@ function App() {
                 <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
             </a>
           </SVGFilter>
+        </div>
+
+        <div className="w-full h-full flex items-center overflow-hidden">
+          <div className="ticker-container w-full h-full flex items-center horizontal-textured-connector">
+            <div className="ticker-content flex animate-scroll gap-10">
+              {/* First set of merch items */}
+              <img src="/Merch Image.png" alt="Merch Item 1" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 2" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 3" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 4" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 5" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 6" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 7" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 8" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              
+              {/* Duplicate set for seamless infinite scroll */}
+              <img src="/Merch Image.png" alt="Merch Item 1" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 2" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 3" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 4" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 5" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 6" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 7" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+              <img src="/Merch Image.png" alt="Merch Item 8" className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
+            </div>
+          </div>
         </div>
       </div>
     </div>

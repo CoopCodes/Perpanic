@@ -99,9 +99,85 @@
       url('/foreground-texture.jpg'), 
       linear-gradient(var(--bg-color), var(--bg-color));
     background-size: cover;
-    }
-
   }
+
+  .horizontal-textured-connector::before {
+    @apply absolute left-0 top-0 bottom-0 w-[200px];
+    content: '';
+    height: 100%;
+    pointer-events: none;
+    mask-image: linear-gradient(
+      to right,
+      black, 
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      black, 
+      transparent
+    );
+    
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+
+    --bg-color: rgb(40, 40, 40);
+
+    background-image: 
+      linear-gradient(rgba(40, 40, 40, 0.35), 
+      rgba(40, 40, 40, 0.35)), 
+      url('/foreground-texture.jpg'), 
+      linear-gradient(var(--bg-color), var(--bg-color));
+    background-size: cover;
+    z-index: 10;
+  }
+
+  .horizontal-textured-connector::after {
+    @apply absolute right-0 top-0 bottom-0 w-[200px];
+    content: '';
+    height: 100%;
+    pointer-events: none;
+    mask-image: linear-gradient(
+      to left,
+      black, 
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to left,
+      black, 
+      transparent
+    );
+    
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+
+    --bg-color: rgb(40, 40, 40);
+
+    background-image: 
+      linear-gradient(rgba(40, 40, 40, 0.35), 
+      rgba(40, 40, 40, 0.35)), 
+      url('/foreground-texture.jpg'), 
+      linear-gradient(var(--bg-color), var(--bg-color));
+    background-size: cover;
+    z-index: 10;
+  }
+  
+}
+
+
 /* Override Tailwind v4's hover media query behavior */
 @custom-variant hover (&:hover);
 @custom-variant group-hover (&:is(:where(.group):hover *));
+
+/* Ticker Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 60s linear infinite;
+}
