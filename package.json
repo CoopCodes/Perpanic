@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "eases": "^1.0.8"
+  },
+  "devDependencies": {
+    "@types/eases": "^1.0.4"
+  }
+}

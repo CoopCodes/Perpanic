@@ -39,27 +39,47 @@ export function MerchSection({ className, items = [], scrollSpeed = 0, scrollDir
         };
     }, []);
 
-    let playbackRateMultiplier = 1;
+    // Track the previous direction to detect changes
+    const prevScrollDirection = useRef<ScrollDirection>(ScrollDirection.Down);
 
+    // Update animation speed and direction based on scroll
     useEffect(() => {
-        calcTickerPlayback();
-    }, [scrollSpeed, animation]);
-
-    const calcTickerPlayback = () => {
         if (!animation) return;
         
-        const speedMultiplier = scrollDirection === ScrollDirection.Down ? 1 + (scrollSpeed / 100) : 1 + (scrollSpeed / 100);
-        const clampedMultiplier = speedMultiplier;
+        const speedMultiplier = 1 + (scrollSpeed / 100);
+        const clampedMultiplier = Math.max(1, Math.min(speedMultiplier, 5)); // Clamp between 1x and 5x
         
-        playbackRateMultiplier =
-            speedMultiplier < 0 ?
-                playbackRateMultiplier :
-                scrollDirection === ScrollDirection.Down ? 1 : -1;
-                
-        animation.playbackRate = (Math.abs(clampedMultiplier) < 1 ? 1 : clampedMultiplier) * playbackRateMultiplier;        
-    }
+        animation.playbackRate = clampedMultiplier;
+        
+        // Only change keyframes if direction actually changed
+        if (scrollDirection !== prevScrollDirection.current) {
+            // Preserve current animation progress
+            const rawCurrentTime = Number(animation.currentTime) || 0;
+            const duration = animation.effect?.getComputedTiming().duration as number || 60000;
+            
+            const currentProgress = rawCurrentTime % duration;
+                        
+            const keyframeEffect = animation.effect as KeyframeEffect;
+            if (scrollDirection === ScrollDirection.Up) {
+                keyframeEffect.setKeyframes([
+                    { transform: 'translateX(-50%)' },
+                    { transform: 'translateX(0%)' }
+                ]);
 
-    calcTickerPlayback();
+                animation.currentTime = duration - currentProgress;
+            } else {
+                // Normal direction (down)
+                keyframeEffect.setKeyframes([
+                    { transform: 'translateX(0%)' },
+                    { transform: 'translateX(-50%)' }
+                ]);
+
+                animation.currentTime = duration - currentProgress;
+            }
+            
+            prevScrollDirection.current = scrollDirection;
+        }
+    }, [scrollSpeed, scrollDirection, animation]);
 
     return (
         <div className={`container relative bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] max-lg:flex max-lg:flex-col lg:py-[13rem] mb-[100vh]`}>
