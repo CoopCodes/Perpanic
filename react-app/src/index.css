@@ -52,7 +52,7 @@
   }
 
   .main-content {
-    @apply px-8 sm:px-12.5 lg:px-20;
+    @apply px-6 sm:px-12.5 lg:px-20;
   }
 
   .bg-textured-black {
@@ -60,7 +60,7 @@
   }
 
   .bg-textured-black::before {
-    @apply absolute top-0 bottom-0 left-1/2;
+    @apply absolute top-0 bottom-0 left-1/2 bg-cover md:bg-contain;
     content: '';
     width: 110vw;
     transform: translateX(-50%);
@@ -70,12 +70,12 @@
       rgba(0, 0, 0, 0.35)), 
       url('/foreground-texture.jpg'), 
       linear-gradient(black, black);
-    background-size: contain;
+    /* background-size: contain; */
     background-repeat: repeat;
   }
   
   .top-textured-connector::after {
-    @apply absolute top-0 left-1/2 translate-y-[-100%] h-[200px];
+    @apply absolute top-0 left-1/2 translate-y-[-100%] h-[200px] bg-contain;
     content: '';
     width: 110vw;
     transform: translateX(-50%);
@@ -99,7 +99,6 @@
       rgba(65, 65, 65, 0.35)), 
       url('/foreground-texture.jpg'), 
       linear-gradient(var(--bg-color), var(--bg-color));
-    background-size: contain;
     background-repeat: repeat;
   }
 
@@ -193,17 +192,3 @@
 /* Override Tailwind v4's hover media query behavior */
 @custom-variant hover (&:hover);
 @custom-variant group-hover (&:is(:where(.group):hover *));
-
-/* Ticker Animation */
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll 60s linear infinite;
-}
