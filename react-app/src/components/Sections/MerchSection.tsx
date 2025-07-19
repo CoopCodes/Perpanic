@@ -3,6 +3,8 @@ import { SVGFilter, defaultSVGFilterTemplate } from '../SVGFilter'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ScrollDirection } from '../../App'
+import { quadIn, quadInOut, quadOut, sineIn, bounceOut } from 'eases'
+import { animate } from '../../utils/transitionUtils'
 
 interface MerchSectionProps {
     className?: string
@@ -42,42 +44,72 @@ export function MerchSection({ className, items = [], scrollSpeed = 0, scrollDir
     // Track the previous direction to detect changes
     const prevScrollDirection = useRef<ScrollDirection>(ScrollDirection.Down);
 
-    // Update animation speed and direction based on scroll
+    const animationActive = useRef<boolean>(false);
+
     useEffect(() => {
-        if (!animation) return;
+        if (!animation || animationActive.current) return;
         
-        const speedMultiplier = 1 + (scrollSpeed / 100);
-        const clampedMultiplier = Math.max(1, Math.min(speedMultiplier, 5)); // Clamp between 1x and 5x
+        // const speedMultiplier = 1 + (scrollSpeed / 100);
+        // const clampedMultiplier = Math.max(1, Math.min(speedMultiplier, 5)); // Clamp between 1x and 5x
         
-        animation.playbackRate = clampedMultiplier;
-        
-        // Only change keyframes if direction actually changed
+        // animation.playbackRate = clampedMultiplier;
+
+        const lerp = 50;
+        const easingFunction = undefined;
+                
         if (scrollDirection !== prevScrollDirection.current) {
-            // Preserve current animation progress
-            const rawCurrentTime = Number(animation.currentTime) || 0;
-            const duration = animation.effect?.getComputedTiming().duration as number || 60000;
-            
-            const currentProgress = rawCurrentTime % duration;
-                        
-            const keyframeEffect = animation.effect as KeyframeEffect;
-            if (scrollDirection === ScrollDirection.Up) {
-                keyframeEffect.setKeyframes([
-                    { transform: 'translateX(-50%)' },
-                    { transform: 'translateX(0%)' }
-                ]);
+            animationActive.current = true;
+            animate(
+                animation.playbackRate,
+                0,
+                lerp,
+                (value: number) => {
+                    animation.playbackRate = value
+                },
+                easingFunction
+            ).then(() => {
+                const rawCurrentTime = Number(animation.currentTime) || 0;
+                const duration = animation.effect?.getComputedTiming().duration as number || 60000;
+                
+                const currentProgress = rawCurrentTime % duration;
+                            
+                const keyframeEffect = animation.effect as KeyframeEffect;
 
-                animation.currentTime = duration - currentProgress;
-            } else {
-                // Normal direction (down)
-                keyframeEffect.setKeyframes([
-                    { transform: 'translateX(0%)' },
-                    { transform: 'translateX(-50%)' }
-                ]);
-
-                animation.currentTime = duration - currentProgress;
-            }
-            
-            prevScrollDirection.current = scrollDirection;
+                if (scrollDirection === ScrollDirection.Up) {
+                    keyframeEffect.setKeyframes([
+                        { transform: 'translateX(-50%)' },
+                        { transform: 'translateX(0%)' }
+                    ]);
+    
+                    animation.currentTime = duration - currentProgress;
+                } else {
+                    // Normal direction (down)
+                    keyframeEffect.setKeyframes([
+                        { transform: 'translateX(0%)' },
+                        { transform: 'translateX(-50%)' }
+                    ]);
+    
+                    animation.currentTime = duration - currentProgress;
+                }
+                
+                prevScrollDirection.current = scrollDirection;
+            }).then(() => {
+                // animate(
+                //     0,
+                //     animation.playbackRate,
+                //     lerp,
+                //     (value: number) => {
+                //         animation.playbackRate = value
+                //     },
+                //     easingFunction
+                // ).then(() => {
+                    animationActive.current = false;
+                // })
+            })
+        } 
+        else {
+                const speedMultiplier = 1 + (scrollSpeed / 55);
+                animation.playbackRate = speedMultiplier;
         }
     }, [scrollSpeed, scrollDirection, animation]);
 

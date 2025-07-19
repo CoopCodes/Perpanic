@@ -16,7 +16,7 @@ function App() {
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection | undefined>();
   const lastScrollTop = useRef(0);
   const lastScrollTime = useRef(Date.now());
-  const isFirstScroll = useRef(true);
+  const isFirstScroll = useRef(0);
 
   // Scroll speed tracking effect
   useEffect(() => {
@@ -25,10 +25,10 @@ function App() {
       const currentTime = Date.now();
 
       // Skip speed calculation on first scroll event - just initialize values
-      if (isFirstScroll.current) {
+      if (isFirstScroll.current < 2) {
         lastScrollTop.current = currentScrollTop;
         lastScrollTime.current = currentTime;
-        isFirstScroll.current = false;
+        isFirstScroll.current++;
         return;
       }
 
