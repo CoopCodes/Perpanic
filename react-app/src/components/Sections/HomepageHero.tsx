@@ -3,11 +3,9 @@ import logo from '../../assets/perpanic-logo.svg'
 import arrowShort from '../../assets/Arrow Short.svg'
 import { SVGFilter, defaultSVGFilterTemplate } from '../SVGFilter'
 
-interface HomepageHeroProps {
-  className?: string
-}
+interface HomepageHeroProps {  }
 
-export function HomepageHero({ className }: HomepageHeroProps) {
+export function HomepageHero({ }: HomepageHeroProps) {
   const linksRef = useRef<HTMLDivElement>(null)
   const animationFrameRef = useRef<number | undefined>(undefined)
   const [, setMousePosition] = useState({ x: 0, y: 0 });
@@ -107,16 +105,6 @@ export function HomepageHero({ className }: HomepageHeroProps) {
 
   return (
     <>
-      {/* <SVGFilter animate={true} className="bg-cover bg-center fixed inset-0 h-[100vh] z-[1000] mix-blend-lighten opacity-50 pointer-events-none bg-[url('./assets/foreground-texture.jpg')]"></SVGFilter> */}
-      <div
-         className="absolute inset-0 z-[100] mix-blend-lighten opacity-50 pointer-events-none"
-         style={{ 
-           backgroundImage: `url('/foreground-texture.jpg')`,
-           backgroundSize: '50% 50%',
-           backgroundRepeat: 'repeat',
-           transform: 'scaleX(-1)'
-         }}>
-      </div>
       <div className={`bg-[url('/hero-image.jpg')] bg-cover bg-center absolute left-0 right-0 top-0 h-[100vh] z-0`}></div>
       <div className="container relative z-1 max-lg:h-[80vh] lg:h-[100vh] flex !max-w-[1820px]">
         <div className="max-lg:mt-auto w-full flex flex-col gap-[38px] md:gap-[160px] md:items-center lg:grid lg:grid-cols-2">

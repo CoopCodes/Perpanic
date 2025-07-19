@@ -76,6 +76,15 @@
       linear-gradient(black, black);
     /* background-size: contain; */
     background-repeat: repeat;
+    z-index: 0;
+  }
+
+  .bg-textured-black > * {
+    @apply relative z-1;
+  }
+
+  .main-content > :nth-child(even)::before {
+    transform: translateX(-50%) rotate(180deg);
   }
   
   .top-textured-connector::after {
@@ -96,11 +105,11 @@
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
 
-    --bg-color: rgb(65, 65, 65);
+    --bg-color: rgb(0, 0, 0);
 
     background-image: 
-      linear-gradient(rgba(65, 65, 65, 0.35), 
-      rgba(65, 65, 65, 0.35)), 
+      linear-gradient(rgba(0, 0, 0, 0.35), 
+      rgba(0, 0, 0, 0.35)), 
       url('/foreground-texture.jpg'), 
       linear-gradient(var(--bg-color), var(--bg-color));
     background-repeat: repeat;
