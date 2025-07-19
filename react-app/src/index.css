@@ -7,6 +7,10 @@
   font-style: normal;
 }
 
+@theme {
+  --breakpoint-3xl: 125rem;
+}
+
 @layer base {
   body {
     font-family: 'Canterbury', serif;
@@ -124,7 +128,7 @@
 
   .horizontal-textured-connector::before,
   .horizontal-textured-connector-lg::before {
-    @apply left-0 w-[35vw];
+    @apply left-0 w-[35vw] 3xl:w-[200px];
     mask-image: linear-gradient(
       to right,
       black 40%, 

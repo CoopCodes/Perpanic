@@ -3,119 +3,57 @@ import { SVGFilter, defaultSVGFilterTemplate } from '../SVGFilter'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ScrollDirection } from '../../App'
-import { quadIn, quadInOut, quadOut, sineIn, bounceOut } from 'eases'
-import { animate } from '../../utils/transitionUtils'
+import { useTickerAnimation } from '../../hooks'
+import { TICKER_ANIMATION_CONFIG } from '../../constants/animationConfig'
 
 interface MerchSectionProps {
-    className?: string
     items?: ReactNode[]
     scrollSpeed?: number,
     scrollDirection?: ScrollDirection
 }
 
-export function MerchSection({ className, items = [], scrollSpeed = 0, scrollDirection = ScrollDirection.Down }: MerchSectionProps) {
+export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = ScrollDirection.Down }: MerchSectionProps) {
     const tickerRef = useRef<HTMLDivElement>(null);
     const [animation, setAnimation] = useState<Animation | null>(null);
 
-    // Initialize the Web Animation API
+    // #region section: Initialize the Web Animation API
+    
     useEffect(() => {
         if (!tickerRef.current) return;
 
-        // Create the animation
-        const anim = tickerRef.current.animate([
-            { transform: 'translateX(0%)' },
-            { transform: 'translateX(-50%)' }
-        ], {
-            duration: 60000, // 60 seconds base duration
-            iterations: Infinity,
-            easing: 'linear'
-        });
+        try {
+            const anim = tickerRef.current.animate(
+                TICKER_ANIMATION_CONFIG.keyframes.forward,
+                {
+                    duration: TICKER_ANIMATION_CONFIG.duration,
+                    iterations: TICKER_ANIMATION_CONFIG.iterations,
+                    easing: TICKER_ANIMATION_CONFIG.easing
+                }
+            );
 
-        setAnimation(anim);
+            setAnimation(anim);
+        } catch (error) {
+            console.error('Failed to create ticker animation:', error);
+        }
 
-        // Cleanup function
         return () => {
-            if (anim) {
-                anim.cancel();
+            if (animation) {
+                animation.cancel();
             }
         };
     }, []);
 
-    // Track the previous direction to detect changes
-    const prevScrollDirection = useRef<ScrollDirection>(ScrollDirection.Down);
+    // #endregion
 
-    const animationActive = useRef<boolean>(false);
-
-    useEffect(() => {
-        if (!animation || animationActive.current) return;
-        
-        // const speedMultiplier = 1 + (scrollSpeed / 100);
-        // const clampedMultiplier = Math.max(1, Math.min(speedMultiplier, 5)); // Clamp between 1x and 5x
-        
-        // animation.playbackRate = clampedMultiplier;
-
-        const lerp = 50;
-        const easingFunction = undefined;
-                
-        if (scrollDirection !== prevScrollDirection.current) {
-            animationActive.current = true;
-            animate(
-                animation.playbackRate,
-                0,
-                lerp,
-                (value: number) => {
-                    animation.playbackRate = value
-                },
-                easingFunction
-            ).then(() => {
-                const rawCurrentTime = Number(animation.currentTime) || 0;
-                const duration = animation.effect?.getComputedTiming().duration as number || 60000;
-                
-                const currentProgress = rawCurrentTime % duration;
-                            
-                const keyframeEffect = animation.effect as KeyframeEffect;
-
-                if (scrollDirection === ScrollDirection.Up) {
-                    keyframeEffect.setKeyframes([
-                        { transform: 'translateX(-50%)' },
-                        { transform: 'translateX(0%)' }
-                    ]);
-    
-                    animation.currentTime = duration - currentProgress;
-                } else {
-                    // Normal direction (down)
-                    keyframeEffect.setKeyframes([
-                        { transform: 'translateX(0%)' },
-                        { transform: 'translateX(-50%)' }
-                    ]);
-    
-                    animation.currentTime = duration - currentProgress;
-                }
-                
-                prevScrollDirection.current = scrollDirection;
-            }).then(() => {
-                // animate(
-                //     0,
-                //     animation.playbackRate,
-                //     lerp,
-                //     (value: number) => {
-                //         animation.playbackRate = value
-                //     },
-                //     easingFunction
-                // ).then(() => {
-                    animationActive.current = false;
-                // })
-            })
-        } 
-        else {
-                const speedMultiplier = 1 + (scrollSpeed / 55);
-                animation.playbackRate = speedMultiplier;
-        }
-    }, [scrollSpeed, scrollDirection, animation]);
+    useTickerAnimation(animation, scrollSpeed, scrollDirection, {
+      lerp: 50,
+      easing: TICKER_ANIMATION_CONFIG.easing,
+      speedDivisor: 55
+    });
 
     return (
         <div className={`container relative bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] max-lg:flex max-lg:flex-col lg:py-[13rem] mb-[100vh]`}>
-            <div className="flex items-center overflow-hidden h-fit w-[100vw] max-lg:w-[110vw] max-lg:ml-[-10vw] max-lg:mt-auto lg:absolute lg:right-1/2 lg:translate-x-[50%]">
+            <div className="flex items-center overflow-hidden h-fit w-[100vw] max-lg:w-[110vw] max-lg:ml-[-10vw] max-lg:mt-auto lg:absolute lg:right-1/2 lg:translate-x-[50%] lg:top-1/2 lg:translate-y-[-50%]">
                 <div className="ticker-container w-full h-full flex items-center horizontal-textured-connector-lg relative">
                     <div ref={tickerRef} className="ticker-content flex gap-5 sm:gap-10">
                         {items.length > 0 ? (

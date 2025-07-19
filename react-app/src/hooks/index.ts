@@ -1,0 +1,1 @@
+export { useTickerAnimation } from './useTickerAnimation'; 
