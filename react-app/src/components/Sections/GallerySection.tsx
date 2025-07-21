@@ -1,6 +1,6 @@
 import arrow from '../../assets/arrow.svg'
 import { SVGFilter, defaultSVGFilterTemplate } from '../SVGFilter'
-import type { ReactNode } from 'react'
+// simport type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 // Event Images, for example { "Vinnies Dive Bar" : ["/gallery-image.png", "/gallery-image.png"], "Good things", ["/gallery-image.png", "/gallery-image.png"] }
@@ -18,6 +18,8 @@ export function GallerySection({ eventImages, scrollTop }: GallerySectionProps) 
         total: 0,
         percentage: 0
     });
+
+    console.log(progress)
 
     const containerRef = useRef<HTMLDivElement>(null);
     const lastImagePartitionRef = useRef<number>(0);
@@ -110,9 +112,10 @@ export function GallerySection({ eventImages, scrollTop }: GallerySectionProps) 
     }, [scrollTop, eventImages, eventIndex, imageIndex])
 
     return (
-        <div className="h-[100vh] container relative bg-textured-black" ref={containerRef}>
-            {Object.entries(eventImages).map(([eventName, images], i) => (
-                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex flex-col gap-6 sm:gap-12 lg:flex-row lg:gap-40 lg:ml-36 lg:items-center ${eventIndex !== i ? "hidden" : ""}`}>
+        <div className="h-[200vh] lg:h-[100vh] max-lg:pt-[50vh] container relative bg-textured-black" ref={containerRef}>
+            <div className="sticky lg:static top-1/2 -translate-y-1/2 lg:translate-y-0 w-full">
+                {Object.entries(eventImages).map(([eventName, images], i) => (
+                    <div className={`absolute lg:relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:top-auto lg:left-auto lg:translate-x-0 lg:translate-y-0 w-full flex flex-col gap-6 sm:gap-12 lg:flex-row lg:gap-40 lg:ml-36 lg:items-center ${eventIndex !== i ? "hidden" : ""}`}>
                     <div>
                         {images.map((img, j) => (
                             <img
@@ -141,6 +144,7 @@ export function GallerySection({ eventImages, scrollTop }: GallerySectionProps) 
                     </div>
                 </div>
             ))}
+            </div>
         </div>
     )
 }

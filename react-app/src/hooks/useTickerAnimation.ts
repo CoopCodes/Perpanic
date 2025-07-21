@@ -24,6 +24,8 @@ export function useTickerAnimation(
     speedDivisor = TICKER_ANIMATION_CONFIG.speedDivisor
   } = options;
 
+  console.log(easing);
+
   const speedMultiplier = useMemo(() => {
     return 1 + (scrollSpeed / speedDivisor);
   }, [scrollSpeed, speedDivisor]);
