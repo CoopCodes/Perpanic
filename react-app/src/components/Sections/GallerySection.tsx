@@ -50,7 +50,7 @@ export function GallerySection({ eventImages, scrollTop }: GallerySectionProps) 
 
         const eventPartition = scrollableDistance / Object.values(eventImages).length;
         const currentEventPartition = Math.floor(clampedScroll / eventPartition);
-        
+
         // Calculate image partitions within the current event partition
         const imagePartitionSize = eventPartition / 8; // 1/8th of event partition
         const scrollWithinEvent = clampedScroll % eventPartition; // How far we've scrolled within current event
@@ -78,12 +78,12 @@ export function GallerySection({ eventImages, scrollTop }: GallerySectionProps) 
         ) {
             const eventNames = Object.keys(eventImages);
             const currentEventImages = eventImages[eventNames[eventIndex]] || [];
-            
+
             if (currentEventImages.length > 0) {
                 const newImageIndex = currentImagePartition % currentEventImages.length;
                 setImageIndex(newImageIndex);
             }
-            
+
             lastImagePartitionRef.current = currentImagePartition;
         }
 
@@ -115,35 +115,34 @@ export function GallerySection({ eventImages, scrollTop }: GallerySectionProps) 
         <div className="h-[200vh] lg:h-[100vh] max-lg:pt-[50vh] container relative bg-textured-black" ref={containerRef}>
             <div className="sticky lg:static top-1/2 -translate-y-1/2 lg:translate-y-0 w-full">
                 {Object.entries(eventImages).map(([eventName, images], i) => (
-                    <div className={`absolute lg:relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:top-auto lg:left-auto lg:translate-x-0 lg:translate-y-0 w-full flex flex-col gap-6 sm:gap-12 lg:flex-row lg:gap-40 lg:ml-36 lg:items-center ${eventIndex !== i ? "hidden" : ""}`}>
-                    <div>
-                        {images.map((img, j) => (
-                            <img
-                                key={j}
-                                src={img}
-                                // src={`https://picsum.photos/seed/${i + j}/400/600`}
-                                className={`h-[75vh] aspect-[4/6] ${imageIndex !== j ? "hidden" : ""}`} />
-                        ))}
+                    <div className={`absolute h-[75vh] lg:relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:top-auto lg:left-auto lg:translate-x-0 lg:translate-y-0 w-full flex flex-col gap-6 sm:gap-12 lg:flex-row lg:gap-40  lg:items-center ${eventIndex !== i ? "hidden" : ""}`}>
+                        <div className="h-full lg:ml-auto">
+                            {images.map((img, j) => (
+                                <img
+                                    key={j}
+                                    src={img}
+                                    className={`h-full object-cover aspect-[4/6] ${imageIndex !== j ? "hidden" : ""}`} />
+                            ))}
+                        </div>
+                        <div className="flex-col gap-1.5 lg:mr-auto">
+                            <SVGFilter animate={true} template={{
+                                ...defaultSVGFilterTemplate,
+                                scale: 2.5,
+                            }}>
+                                <h2 className='h3 leading-none'>{eventName}</h2>
+                            </SVGFilter>
+                            <SVGFilter animate={true} template={{
+                                ...defaultSVGFilterTemplate,
+                                scale: 2,
+                            }}>
+                                <a className="flex gap-4 items-center group w-fit" href="#">
+                                    <p className="subheading underline">gallery</p>
+                                    <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
+                                </a>
+                            </SVGFilter>
+                        </div>
                     </div>
-                    <div className="flex-col gap-1.5">
-                        <SVGFilter animate={true} template={{
-                            ...defaultSVGFilterTemplate,
-                            scale: 2.5,
-                        }}>
-                            <h2 className='h3 leading-none'>{eventName}</h2>
-                        </SVGFilter>
-                        <SVGFilter animate={true} template={{
-                            ...defaultSVGFilterTemplate,
-                            scale: 2,
-                        }}>
-                            <a className="flex gap-4 items-center group w-fit" href="#">
-                                <p className="subheading underline">gallery</p>
-                                <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
-                            </a>
-                        </SVGFilter>
-                    </div>
-                </div>
-            ))}
+                ))}
             </div>
         </div>
     )
