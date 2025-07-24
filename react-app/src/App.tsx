@@ -29,7 +29,7 @@ function App() {
       const currentTime = Date.now();
 
       // Skip speed calculation on first scroll event - just initialize values
-      if (isFirstScroll.current < 2) {
+      if (isFirstScroll.current < 4) {
         lastScrollTop.current = currentScrollTop;
         lastScrollTime.current = currentTime;
         isFirstScroll.current++;
