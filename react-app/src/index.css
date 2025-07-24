@@ -49,6 +49,7 @@
   .p1 {
     /* tracking: -0.04em for all breakpoints */
     @apply leading-[120%] text-[1.75rem] tracking-[-.04em] md:text-[1rem] lg:text-[1rem];
+    font-family: Arial, sans-serif;
   }
 
   .container {
@@ -171,34 +172,6 @@
       display: none;
     }
   }
-
-  /*   
-  .bg-textured::before {
-    @apply absolute inset-[-3rem] top-[-2rem];
-    content: '';
-    mask-image: radial-gradient(
-      rgba(40, 40, 40, 0.4) 40%,
-      rgba(40, 40, 40, 0) 100%,
-      rgba(40, 40, 40, 0.4) 40%
-    );
-    -webkit-mask-image: radial-gradient(
-      rgba(40, 40, 40, 0.4) 40%,
-      rgba(40, 40, 40, 0) 100%,
-      rgba(40, 40, 40, 0.4) 40%
-    );
-    
-    mask-size: cover;
-    mask-repeat: no-repeat;
-
-    --bg-color: rgb(40, 40, 40);
-
-    background-image: 
-      linear-gradient(rgba(40, 40, 40, 0.35), 
-      rgba(40, 40, 40, 0.35)), 
-      url('/foreground-texture.jpg'), 
-      linear-gradient(var(--bg-color), var(--bg-color));
-    background-size: cover;
-  } */
 }
 
 

@@ -3,6 +3,8 @@ import { useRef, useEffect, useState } from 'react'
 import { HomepageHero } from './components/Sections/HomepageHero'
 import { MerchSection } from './components/Sections/MerchSection'
 import { GallerySection } from './components/Sections/GallerySection'
+import { EventsSection } from './components/Sections/EventsSection'
+import type { EventModel } from './models/eventModel'
 
 export type ScrollDirection = 'up' | 'down'
 
@@ -58,25 +60,37 @@ function App() {
     <img key={index} src="/Merch Image.png" loading='lazy' alt={`Merch Item ${index + 1}`} className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
   ));
 
-  const eventImages = {
-    "Vinnies dive bar": [
-      "/gallery-image.png",
-      "/gallery-image-2.png",
-      "/gallery-image-3.png",
-      "/gallery-image-4.png"
-    ],
-    "Good things": [
-      "/gallery-image-5.png",
-      "/gallery-image-6.png",
-      "/gallery-image-7.png",
-      "/gallery-image-8.png"
-    ],
-    "Woolloongabba": [
-      "/gallery-image-9.png",
-      "/gallery-image-10.png",
-      "/gallery-image-11.png"
-    ]
-  };
+  const events: EventModel[] = [
+    {
+      title: "Vinnies dive bar",
+      date: new Date("2025-08-01"),
+      images: [
+        "/gallery-image.png", 
+        "/gallery-image-2.png", 
+        "/gallery-image-3.png", 
+        "/gallery-image-4.png"
+      ]
+    },
+    {
+      title: "Good things",
+      date: new Date("2025-08-01"),
+      images: [
+        "/gallery-image-5.png", 
+        "/gallery-image-6.png", 
+        "/gallery-image-7.png", 
+        "/gallery-image-8.png"
+      ]
+    },
+    {
+      title: "Woolloongabba",
+      date: new Date("2025-08-01"),
+      images: [
+        "/gallery-image-9.png", 
+        "/gallery-image-10.png", 
+        "/gallery-image-11.png"
+      ]
+    }
+  ]
 
   return (
     <div className="main-content relative">
@@ -91,7 +105,8 @@ function App() {
       </div>
       <HomepageHero />
       <MerchSection items={merchItems} scrollSpeed={scrollSpeed} scrollDirection={scrollDirection} />
-      <GallerySection eventImages={eventImages} scrollTop={scrollTop} />
+      <GallerySection events={events} scrollTop={scrollTop} />
+      <EventsSection events={[...events, ...events, ...events]} />
       <div className="h-[100vh] container relative bg-textured-black"></div>
     </div>
   )
