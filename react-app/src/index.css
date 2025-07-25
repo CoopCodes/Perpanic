@@ -23,32 +23,32 @@
 @layer components {
   .h1 {
     /* tracking: -0.04em for all breakpoints */
-    @apply text-[5.625rem] tracking-[-.04em] md:text-[6.25rem] lg:text-[12.5rem];
+    @apply text-[5.625rem] tracking-[-.04em] sm:text-[6.25rem] lg:text-[12.5rem];
   }
 
   .h2 {
     /* tracking: -0.04em for all breakpoints */
-    @apply text-[3.75rem] tracking-[-.04em] md:text-[4.5rem] lg:text-[8.75rem];
+    @apply text-[3.75rem] tracking-[-.04em] sm:text-[4.5rem] lg:text-[8.75rem];
   }
 
   .h3 {
     /* tracking: -0.04em for all breakpoints */
-    @apply text-[2rem] tracking-[-.04em] md:text-[2.75rem] lg:text-[5.25rem];
+    @apply text-[2rem] tracking-[-.04em] sm:text-[2.75rem] lg:text-[5.25rem];
   }
 
   .large-link {
     /* tracking: -0.04em for all breakpoints */
-    @apply hover:underline leading-[100%] text-[2.25rem] tracking-[-.04em] md:text-[3.375rem] lg:text-[4rem];
+    @apply hover:underline leading-[100%] text-[2.25rem] tracking-[-.04em] sm:text-[3.375rem] lg:text-[4rem];
   }
 
   .subheading {
     /* tracking: -0.04em for all breakpoints */
-    @apply leading-[100%] text-[1.25rem] tracking-[-.04em] md:text-[1.25rem] lg:text-[2rem];
+    @apply leading-[100%] text-[1.25rem] tracking-[-.04em] sm:text-[1.25rem] lg:text-[2rem];
   }
 
   .p1 {
     /* tracking: -0.04em for all breakpoints */
-    @apply leading-[120%] text-[1.75rem] tracking-[-.04em] md:text-[1rem] lg:text-[1rem];
+    @apply leading-[120%] text-[1rem] tracking-[-.04em] sm:text-[1.75rem] lg:text-[1.75rem];
     font-family: Arial, sans-serif;
   }
 

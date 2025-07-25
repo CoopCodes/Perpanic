@@ -59,20 +59,20 @@ export function EventsSection({ events }: EventsSectionProps) {
                     src={events[eventIndex].images[2]}
                     alt="test"
                 />
-                <div className='h-fit w-full'>
-                    <div className="flex pb-3 border-b-1 items-end mb-6">
+                <div className='h-fit w-full max-lg:mt-6'>
+                    <div className="flex pb-3 border-b-1 items-end mb-6 max-md:flex-col max-md:items-start">
                         <SVGFilter animate={true} template={{
                             ...defaultSVGFilterTemplate,
                             scale: 2.5,
                         }}>
-                            <h2 className='h3 leading-none'>upcoming events</h2>
+                            <h2 className='h2 lg:text-[5.25rem] leading-[90%] mb-1 mr-5'>upcoming events</h2>
                         </SVGFilter>
-                        <SVGFilter animate={true} className='mb-3 ml-auto' template={{
+                        <SVGFilter animate={true} className='mb-3 md:ml-auto max-md:mt-3' template={{
                             ...defaultSVGFilterTemplate,
                             scale: 2,
                         }}>
                             <a className="flex gap-4 items-center group w-fit" href="#">
-                                <p className="subheading underline">see all</p>
+                                <p className="subheading underline text-nowrap">see all</p>
                                 <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
                             </a>
                         </SVGFilter>
@@ -92,9 +92,9 @@ export function EventsSection({ events }: EventsSectionProps) {
                                 onMouseEnter={() => handleMouseEnter(index)}
                                 onMouseLeave={handleMouseLeave}
                             >
-                                <h3 className={`p1 uppercase text-lg lg:text-2xl text-nowrap transition-all duration-200 ${eventIndex === index ? 'underline mb-1 text-xl lg:text-[28px] font-[600]' : ''}`}>{event.title}</h3>
+                                <h3 className={`p1 uppercase text-lg lg:text-2xl text-nowrap transition-all w-full sm:w-fit duration-200 text-ellipsis max-sm:overflow-hidden max-sm:min-w-[120px] ${eventIndex === index ? 'underline mb-1 text-xl lg:text-[28px] font-[600]' : ''}`}>{event.title}</h3>
                                 <svg
-                                    className="mx-4 flex-grow h-px"
+                                    className="mx-4 flex-grow w-full h-px max-sm:min-w-[10px]"
                                     preserveAspectRatio="none"
                                     viewBox="0 0 100 1"
                                 >
