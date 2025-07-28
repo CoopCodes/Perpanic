@@ -14,7 +14,6 @@ export const ScrollDirection = {
 } as const
 
 function App() {
-  // Scroll speed tracking state
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection | undefined>();
   const [scrollTop, setScrollTop] = useState(0);

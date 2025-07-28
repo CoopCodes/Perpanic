@@ -28,3 +28,11 @@ export function animate(
     requestAnimationFrame(update);
   });
 }
+
+export function vw(value: number, viewWidth: number) {
+  return (viewWidth * value) / 1000;
+}
+
+export function vh(value: number, viewHeight: number) {
+  return (viewHeight * value) / 1000;
+}

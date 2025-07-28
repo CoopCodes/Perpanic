@@ -1,5 +1,5 @@
-import arrow from '../../assets/Arrow.svg'
 import { SVGFilter, defaultSVGFilterTemplate } from '../SVGFilter'
+import { ArrowButton } from '../ArrowButton'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ScrollDirection } from '../../App'
@@ -81,15 +81,7 @@ export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = Sc
                 }}>
                     <h2 className='h2 leading-none'>merch</h2>
                 </SVGFilter>
-                <SVGFilter animate={true} template={{
-                    ...defaultSVGFilterTemplate,
-                    scale: 2.2,
-                }}>
-                    <a className="flex gap-4 items-center group w-fit" href="#">
-                        <p className="subheading underline">see the collection</p>
-                        <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
-                    </a>
-                </SVGFilter>
+                <ArrowButton title="see the collection" href="#" />
             </div>
         </div>
     )

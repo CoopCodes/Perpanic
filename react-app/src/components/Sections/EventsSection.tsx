@@ -1,6 +1,6 @@
 import type { EventModel } from '../../models/eventModel'
 import { defaultSVGFilterTemplate, SVGFilter } from '../SVGFilter'
-import arrow from '../../assets/Arrow.svg'
+import { ArrowButton } from '../ArrowButton'
 import { useEffect, useState, useRef } from 'react'
 
 interface EventsSectionProps {
@@ -67,15 +67,7 @@ export function EventsSection({ events }: EventsSectionProps) {
                         }}>
                             <h2 className='h2 lg:text-[5.25rem] leading-[90%] mb-1 mr-5'>upcoming events</h2>
                         </SVGFilter>
-                        <SVGFilter animate={true} className='mb-3 md:ml-auto max-md:mt-3' template={{
-                            ...defaultSVGFilterTemplate,
-                            scale: 2,
-                        }}>
-                            <a className="flex gap-4 items-center group w-fit" href="#">
-                                <p className="subheading underline text-nowrap">see all</p>
-                                <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
-                            </a>
-                        </SVGFilter>
+                        <ArrowButton title="see all" href="#" className='mb-3 md:ml-auto max-md:mt-3' />
                     </div>
                     {events.map((event, index) => (
                         <SVGFilter

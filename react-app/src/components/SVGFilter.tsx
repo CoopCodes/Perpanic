@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { useEffect, useState, useRef } from 'react'
+import { useScreenSize } from '../hooks/useScreenSize'
+import { vw } from '../utils/transitionUtils'
 
 export interface SVGFilterTemplate {
   type: 'fractalNoise' | 'turbulence'
@@ -15,7 +17,7 @@ export const defaultSVGFilterTemplate: SVGFilterTemplate = {
   type: 'fractalNoise',
   baseFrequency: 0.2,
   numOctaves: 6,
-  scale: 2.5,
+  scale: 2,
 }
 
 interface SVGFilterProps {
@@ -23,12 +25,26 @@ interface SVGFilterProps {
   className?: string,
   template?: SVGFilterTemplate
   animate?: boolean,
-  scale?: number | undefined,
 }
 
-export function SVGFilter({ children, className, scale, template = defaultSVGFilterTemplate, animate = false  }: SVGFilterProps) {
+export function SVGFilter({ children, className, template = defaultSVGFilterTemplate, animate = false  }: SVGFilterProps) {
   const [currentSeed, setCurrentSeed] = useState(0)
   const filterId = useRef(`filter-${crypto.randomUUID()}`).current
+  const { width } = useScreenSize();
+
+  const calculateScale = () => {
+    return Math.max(2, vw(template.scale, width));
+  }
+  
+  const [calculatedScale, setCalculatedScale] = useState(() => calculateScale());
+  
+  useEffect(() => {
+    setCalculatedScale(calculateScale());
+  }, [template.scale, width]);
+  
+  useEffect(() => {   
+    // console.log(calculatedScale, width)
+  }, [calculatedScale, width])
 
   useEffect(() => {
     if (!animate) return
@@ -38,21 +54,6 @@ export function SVGFilter({ children, className, scale, template = defaultSVGFil
     }, ANIMATION_INTERVAL);
 
     return () => clearInterval(interval)
-
-    // let lastUpdate = 0;
-    // const handleMouseMove = () => {
-    //   const now = Date.now();
-    //   if (now - lastUpdate > 50) {
-    //     setCurrentSeed(prev => prev >= MAX_SEED ? 0 : prev + 1);
-    //     lastUpdate = now;
-    //   }
-    // };
-    // window.addEventListener("mousemove", handleMouseMove);
-
-    // return () => {
-    //   window.removeEventListener("mousemove", handleMouseMove);
-    // };
-
   }, [animate])
 
   return (
@@ -73,7 +74,7 @@ export function SVGFilter({ children, className, scale, template = defaultSVGFil
                 seed={animate ? currentSeed : 0}
               />
               <feDisplacementMap
-                scale={scale ?? template.scale}
+                scale={calculatedScale}
                 result="result5"
                 xChannelSelector="R"
                 in="SourceGraphic"

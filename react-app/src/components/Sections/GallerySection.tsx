@@ -1,6 +1,6 @@
-import arrow from '../../assets/Arrow.svg'
 import type { EventModel } from '../../models/eventModel'
 import { SVGFilter, defaultSVGFilterTemplate } from '../SVGFilter'
+import { ArrowButton } from '../ArrowButton'
 // simport type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -19,8 +19,6 @@ export function GallerySection({ events, scrollTop }: GallerySectionProps) {
         total: 0,
         percentage: 0
     });
-
-    console.log(progress)
 
     const containerRef = useRef<HTMLDivElement>(null);
     const lastImagePartitionRef = useRef<number>(0);
@@ -131,15 +129,7 @@ export function GallerySection({ events, scrollTop }: GallerySectionProps) {
                             }}>
                                 <h2 className='h3 leading-none'>{event.title}</h2>
                             </SVGFilter>
-                            <SVGFilter animate={true} template={{
-                                ...defaultSVGFilterTemplate,
-                                scale: 2,
-                            }}>
-                                <a className="flex gap-4 items-center group w-fit" href="#">
-                                    <p className="subheading underline">gallery</p>
-                                    <img src={arrow} className="h-3 transition-all mt-1 group-hover:translate-x-2"></img>
-                                </a>
-                            </SVGFilter>
+                            <ArrowButton title="gallery" href="#" />
                         </div>
                     </div>
                 ))}
