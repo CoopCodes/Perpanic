@@ -61,10 +61,7 @@ export function EventsSection({ events }: EventsSectionProps) {
                 />
                 <div className='h-fit w-full max-lg:mt-6'>
                     <div className="flex pb-3 border-b-1 items-end mb-6 max-md:flex-col max-md:items-start">
-                        <SVGFilter animate={true} template={{
-                            ...defaultSVGFilterTemplate,
-                            scale: 2.5,
-                        }}>
+                        <SVGFilter animate={true}>
                             <h2 className='h2 lg:text-[5.25rem] leading-[90%] mb-1 mr-5'>upcoming events</h2>
                         </SVGFilter>
                         <ArrowButton title="see all" href="#" className='mb-3 md:ml-auto max-md:mt-3' />
@@ -75,7 +72,7 @@ export function EventsSection({ events }: EventsSectionProps) {
                             className={`w-full flex mb-1 items-center ${eventIndex === index ? 'opacity-100' : 'opacity-90'}`}
                             template={{
                                 ...defaultSVGFilterTemplate,
-                                scale: 2,
+                                scale: 1,
                             }}
                             key={event.title + index}
                         >

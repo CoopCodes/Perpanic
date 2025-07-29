@@ -17,7 +17,7 @@ export const defaultSVGFilterTemplate: SVGFilterTemplate = {
   type: 'fractalNoise',
   baseFrequency: 0.2,
   numOctaves: 6,
-  scale: 2,
+  scale: 1.5,
 }
 
 interface SVGFilterProps {
@@ -33,7 +33,7 @@ export function SVGFilter({ children, className, template = defaultSVGFilterTemp
   const { width } = useScreenSize();
 
   const calculateScale = () => {
-    return Math.max(2, vw(template.scale, width));
+    return vw(template.scale, width);
   }
   
   const [calculatedScale, setCalculatedScale] = useState(() => calculateScale());
