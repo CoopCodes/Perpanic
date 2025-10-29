@@ -182,3 +182,8 @@
 /* Override Tailwind v4's hover media query behavior */
 @custom-variant hover (&:hover);
 @custom-variant group-hover (&:is(:where(.group):hover *));
+
+/* Performance hint for ticker */
+.ticker-content {
+  will-change: transform;
+}

@@ -3,7 +3,6 @@ import { ArrowButton } from '../ArrowButton'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ScrollDirection } from '../../App'
-import { useTickerAnimation } from '../../hooks'
 import { TICKER_ANIMATION_CONFIG } from '../../constants/animationConfig'
 
 interface MerchSectionProps {
@@ -14,42 +13,88 @@ interface MerchSectionProps {
 
 export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = ScrollDirection.Down }: MerchSectionProps) {
     const tickerRef = useRef<HTMLDivElement>(null);
-    const [animation, setAnimation] = useState<Animation | null>(null);
 
-    // #region section: Initialize the Web Animation API
-    
+    // Direct transform control state/refs
+    const rafIdRef = useRef<number | null>(null);
+    const lastTsRef = useRef<number | null>(null);
+    const positionPxRef = useRef(0);
+    const halfSpanPxRef = useRef(0);
+    const directionRef = useRef(scrollDirection === ScrollDirection.Down ? 1 : -1);
+    const scrollSpeedRef = useRef(scrollSpeed);
+
+    // Keep refs in sync with props without restarting RAF
     useEffect(() => {
-        if (!tickerRef.current) return;
+        directionRef.current = scrollDirection === ScrollDirection.Down ? 1 : -1;
+    }, [scrollDirection]);
 
-        try {
-            const anim = tickerRef.current.animate(
-                TICKER_ANIMATION_CONFIG.keyframes.forward,
-                {
-                    duration: TICKER_ANIMATION_CONFIG.duration,
-                    iterations: TICKER_ANIMATION_CONFIG.iterations,
-                    easing: TICKER_ANIMATION_CONFIG.easing
-                }
-            );
+    useEffect(() => {
+        scrollSpeedRef.current = scrollSpeed;
+    }, [scrollSpeed]);
 
-            setAnimation(anim);
-        } catch (error) {
-            console.error('Failed to create ticker animation:', error);
-        }
+    // Measure the ticker width and compute the half-span (duplicated content)
+    useEffect(() => {
+        const measure = () => {
+            if (!tickerRef.current) return;
+            const fullWidth = tickerRef.current.scrollWidth;
+            halfSpanPxRef.current = fullWidth / 2;
+        };
+
+        // Initial measure after layout
+        const id = requestAnimationFrame(measure);
+
+        // Re-measure on resize
+        const handleResize = () => requestAnimationFrame(measure);
+        window.addEventListener('resize', handleResize);
+
+        // Also observe size changes of the content itself
+        const ro = new ResizeObserver(measure);
+        if (tickerRef.current) ro.observe(tickerRef.current);
 
         return () => {
-            if (animation) {
-                animation.cancel();
+            cancelAnimationFrame(id);
+            window.removeEventListener('resize', handleResize);
+            ro.disconnect();
+        };
+    }, [items.length]);
+
+    // RAF loop to update transform based on time and scroll speed
+    useEffect(() => {
+        const step = (ts: number) => {
+            if (!tickerRef.current) {
+                rafIdRef.current = requestAnimationFrame(step);
+                return;
             }
+
+            if (lastTsRef.current == null) lastTsRef.current = ts;
+            const dt = (ts - lastTsRef.current) / 1000; // seconds
+            lastTsRef.current = ts;
+
+            const halfSpan = halfSpanPxRef.current;
+            if (halfSpan > 0) {
+                const basePps = halfSpan / (TICKER_ANIMATION_CONFIG.duration / 1000); // pixels per second to traverse half in duration
+                const multiplier = 1 + (scrollSpeedRef.current / TICKER_ANIMATION_CONFIG.speedDivisor);
+                const signedPps = basePps * multiplier * directionRef.current;
+
+                positionPxRef.current += signedPps * dt;
+
+                // Wrap into [0, halfSpan)
+                let pos = positionPxRef.current % halfSpan;
+                if (pos < 0) pos += halfSpan;
+                positionPxRef.current = pos;
+
+                tickerRef.current.style.transform = `translate3d(${-pos}px, 0, 0)`;
+            }
+
+            rafIdRef.current = requestAnimationFrame(step);
+        };
+
+        rafIdRef.current = requestAnimationFrame(step);
+        return () => {
+            if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current);
+            rafIdRef.current = null;
+            lastTsRef.current = null;
         };
     }, []);
-
-    // #endregion
-
-    useTickerAnimation(animation, scrollSpeed, scrollDirection, {
-      lerp: 50,
-      easing: TICKER_ANIMATION_CONFIG.easing,
-      speedDivisor: 55
-    });
 
     return (
         <div className="container relative bg-textured-black top-textured-connector h-[100vh] max-lg:mt-[10.6rem] max-lg:flex max-lg:flex-col lg:py-[13rem]">
