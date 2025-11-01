@@ -6,46 +6,14 @@ import { GallerySection } from './components/Sections/GallerySection'
 import { EventsSection } from './components/Sections/EventsSection'
 import type { EventModel } from './models/eventModel'
 
-export type ScrollDirection = 'up' | 'down'
-
-export const ScrollDirection = {
-  Up: 'up' as const,
-  Down: 'down' as const
-} as const
-
 function App() {
-  const [scrollSpeed, setScrollSpeed] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection | undefined>();
   const [scrollTop, setScrollTop] = useState(0);
-  const lastScrollTop = useRef(0);
-  const lastScrollTime = useRef(Date.now());
-  const isFirstScroll = useRef(0);
 
-  // Scroll speed tracking effect
+  // Track scroll position for sections that respond to scrollTop
   useEffect(() => {
     function handleScroll() {
       const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const currentTime = Date.now();
-
-      // Skip speed calculation on first scroll event - just initialize values
-      if (isFirstScroll.current < 4) {
-        lastScrollTop.current = currentScrollTop;
-        lastScrollTime.current = currentTime;
-        isFirstScroll.current++;
-        return;
-      }
-
-      const scrollDistance = Math.abs(currentScrollTop - lastScrollTop.current);
-      const timeDifference = currentTime - lastScrollTime.current;
-      const speed = timeDifference > 0 ? (scrollDistance / timeDifference) * 1000 : 0;
-      setScrollSpeed(speed);
-
-      const direction = currentScrollTop > lastScrollTop.current ? ScrollDirection.Down : ScrollDirection.Up;
-      setScrollDirection(direction);
       setScrollTop(currentScrollTop);
-
-      lastScrollTop.current = currentScrollTop;
-      lastScrollTime.current = currentTime;
     }
 
     window.addEventListener("scroll", handleScroll);
@@ -107,7 +75,7 @@ function App() {
         }}>
       </div>
       <HomepageHero />
-      <MerchSection items={merchItems} scrollSpeed={scrollSpeed} scrollDirection={scrollDirection} />
+      <MerchSection items={merchItems} />
       <GallerySection events={events.current}/>
       <EventsSection events={events.current} />
       <div className="h-[100vh] container relative bg-textured-black"></div>

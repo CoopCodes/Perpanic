@@ -1,1 +1,1 @@
-export { useTickerAnimation } from './useTickerAnimation'; 
+export {};
