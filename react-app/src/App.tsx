@@ -75,7 +75,7 @@ function App() {
         }}>
       </div>
       <HomepageHero />
-      <MerchSection items={merchItems} scrollSpeed={scrollSpeed} scrollDirection={scrollDirection} />
+      <MerchSection items={merchItems} />
       <GallerySection events={events.current}/>
       <EventsSection events={events.current} />
       <div className="h-[100vh] container relative bg-textured-black"></div>
