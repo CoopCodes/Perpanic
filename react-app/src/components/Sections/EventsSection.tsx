@@ -52,8 +52,8 @@ export function EventsSection({ events }: EventsSectionProps) {
     };
 
     return (
-        <div className="container relative bg-textured-black h-[100vh]">
-            <div className="flex flex-col lg:flex-row lg:gap-16.5 w-full lg:max-w-[1120px] mx-auto">
+        <div className="container relative bg-textured-black h-[100vh] grid place-items-center">
+            <div className="flex flex-col lg:flex-row lg:gap-16.5 w-full lg:max-w-[1120px]">
                 <img
                     className={`h-[422px] w-[270px] object-cover transition-opacity ease-in-out duration-200 ${fade === 'in' ? 'opacity-100' : 'opacity-0'}`}
                     src={events[eventIndex].images[2]}
