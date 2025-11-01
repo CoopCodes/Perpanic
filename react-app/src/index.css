@@ -183,7 +183,17 @@
 @custom-variant hover (&:hover);
 @custom-variant group-hover (&:is(:where(.group):hover *));
 
-/* Performance hint for ticker */
+/* Ticker animation */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .ticker-content {
   will-change: transform;
+  animation: ticker-scroll 60s linear infinite;
 }
