@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ScrollDirection } from '../../App'
 import { TICKER_ANIMATION_CONFIG } from '../../constants/animationConfig'
+import { useScreenSize } from '../../hooks/useScreenSize'
 
 interface MerchSectionProps {
     items?: ReactNode[]
@@ -13,6 +14,7 @@ interface MerchSectionProps {
 
 export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = ScrollDirection.Down }: MerchSectionProps) {
     const tickerRef = useRef<HTMLDivElement>(null);
+    const { isMobile } = useScreenSize();
 
     // Direct transform control state/refs
     const rafIdRef = useRef<number | null>(null);
@@ -21,6 +23,7 @@ export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = Sc
     const halfSpanPxRef = useRef(0);
     const directionRef = useRef(scrollDirection === ScrollDirection.Down ? 1 : -1);
     const scrollSpeedRef = useRef(scrollSpeed);
+    const isMobileRef = useRef(isMobile);
 
     // Keep refs in sync with props without restarting RAF
     useEffect(() => {
@@ -30,6 +33,10 @@ export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = Sc
     useEffect(() => {
         scrollSpeedRef.current = scrollSpeed;
     }, [scrollSpeed]);
+
+    useEffect(() => {
+        isMobileRef.current = isMobile;
+    }, [isMobile]);
 
     // Measure the ticker width and compute the half-span (duplicated content)
     useEffect(() => {
@@ -72,8 +79,12 @@ export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = Sc
             const halfSpan = halfSpanPxRef.current;
             if (halfSpan > 0) {
                 const basePps = halfSpan / (TICKER_ANIMATION_CONFIG.duration / 1000); // pixels per second to traverse half in duration
-                const multiplier = 1 + (scrollSpeedRef.current / TICKER_ANIMATION_CONFIG.speedDivisor);
-                const signedPps = basePps * multiplier * directionRef.current;
+                const scrollContribution = scrollSpeedRef.current / TICKER_ANIMATION_CONFIG.speedDivisor;
+                const mobileScrollMultiplier = .5; // 50% slower scroll speed contribution on mobile
+                // const mobileScrollMultiplier = isMobileRef.current ? 0.5 : 1; // 50% slower scroll speed contribution on mobile
+
+                const scrollMultiplier = 1 + (scrollContribution * mobileScrollMultiplier);
+                const signedPps = basePps * scrollMultiplier * directionRef.current;
 
                 positionPxRef.current += signedPps * dt;
 
