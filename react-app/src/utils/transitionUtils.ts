@@ -1,3 +1,5 @@
+import { Breakpoint, useScreenSize, type BreakpointType } from "../hooks/useScreenSize";
+
 type EasingFunction = (t: number) => number;
 type SetterFunction = (value: number) => void;
 
@@ -34,5 +36,12 @@ export function vw(value: number, viewWidth: number) {
 }
 
 export function vh(value: number, viewHeight: number) {
-  return (viewHeight * value) / 1000;
+  return (viewHeight * value) / 100;
+}
+
+export function getValueForBreakpoint(mobile: any, tablet: any, desktop: any, currBreakpoint: BreakpointType) {
+  if (currBreakpoint >= Breakpoint.XS) return mobile;
+  if (currBreakpoint >= Breakpoint.XS) return tablet;
+  if (currBreakpoint >= Breakpoint.MD) return desktop;
+  return desktop;
 }

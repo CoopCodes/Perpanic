@@ -75,10 +75,7 @@ export function MerchSection({ items = [], scrollSpeed = 0, scrollDirection = Sc
             </div>
 
             <div className="flex-col gap-1.5 my-auto max-lg:mt-12 lg:absolute lg:top-1/2 lg:translate-y-[-50%] xl:ml-24 z-100 bg-textured max-lg:mb-auto">
-                <SVGFilter animate={true} template={{
-                    ...defaultSVGFilterTemplate,
-                    scale: 3,
-                }}>
+                <SVGFilter animate={true}>
                     <h2 className='h2 leading-none'>merch</h2>
                 </SVGFilter>
                 <ArrowButton title="see the collection" href="#" />

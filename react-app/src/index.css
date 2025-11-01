@@ -52,6 +52,10 @@
     font-family: Arial, sans-serif;
   }
 
+  .arial {
+    font-family: Arial, sans-serif;
+  }
+
   .container {
     @apply mx-auto sm:max-w-[668px] lg:max-w-[1200px];
   }

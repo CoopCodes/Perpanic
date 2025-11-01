@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 import { useEffect, useState, useRef } from 'react'
-import { useScreenSize } from '../hooks/useScreenSize'
-import { vw } from '../utils/transitionUtils'
+import { useScreenSize, type BreakpointType } from '../hooks/useScreenSize'
+import { getValueForBreakpoint, vw } from '../utils/transitionUtils'
 
 export interface SVGFilterTemplate {
   type: 'fractalNoise' | 'turbulence'
@@ -23,17 +23,18 @@ export const defaultSVGFilterTemplate: SVGFilterTemplate = {
 interface SVGFilterProps {
   children?: ReactNode,
   className?: string,
+  ref?: Ref<any>,
   template?: SVGFilterTemplate
   animate?: boolean,
 }
 
-export function SVGFilter({ children, className, template = defaultSVGFilterTemplate, animate = false  }: SVGFilterProps) {
+export function SVGFilter({ children, className, ref, template = defaultSVGFilterTemplate, animate = false  }: SVGFilterProps) {
   const [currentSeed, setCurrentSeed] = useState(0)
   const filterId = useRef(`filter-${crypto.randomUUID()}`).current
-  const { width } = useScreenSize();
+  const { width, sizeCategory } = useScreenSize();
 
   const calculateScale = () => {
-    return vw(template.scale, width);
+    return Math.max(getValueForBreakpoint(2, 2, 2, sizeCategory as BreakpointType), vw(template.scale, width));
   }
   
   const [calculatedScale, setCalculatedScale] = useState(() => calculateScale());
@@ -58,7 +59,7 @@ export function SVGFilter({ children, className, template = defaultSVGFilterTemp
 
   return (
     <>
-      <div className={`${filterId} ${className ?? ""}`} style={{ filter: !children ? `url(#${filterId})` : "" }}>
+      <div className={`${filterId} ${className ?? ""}`} style={{ filter: !children ? `url(#${filterId})` : "" }} ref={ref}>
         {children}
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="0" width="0">
           <defs>
