@@ -77,7 +77,7 @@
     background-image: 
       linear-gradient(rgba(0, 0, 0, 0.35), 
       rgba(0, 0, 0, 0.35)), 
-      url('/foreground-texture.jpg'), 
+      url('/foreground-texture-low-res-3.webp'), 
       linear-gradient(black, black);
     /* background-size: contain; */
     background-repeat: repeat;
@@ -115,7 +115,7 @@
     background-image: 
       linear-gradient(rgba(0, 0, 0, 0.35), 
       rgba(0, 0, 0, 0.35)), 
-      url('/foreground-texture.jpg'), 
+      url('/foreground-texture-low-res-3.webp'), 
       linear-gradient(var(--bg-color), var(--bg-color));
     background-repeat: repeat;
   }
@@ -134,7 +134,7 @@
     background-image: 
       linear-gradient(rgba(32, 32, 32, 0.7), 
       rgba(32, 32, 32, 0.7)), 
-      url('/foreground-texture.jpg'), 
+      url('/foreground-texture-low-res-3.webp'), 
       linear-gradient(var(--bg-color), var(--bg-color));
     background-size: cover, cover, 100vw 100vh;
     z-index: 10;

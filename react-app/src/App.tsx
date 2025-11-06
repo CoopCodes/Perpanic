@@ -68,7 +68,7 @@ function App() {
       <div
         className="absolute inset-0 z-[100] mix-blend-lighten opacity-50 pointer-events-none"
         style={{ 
-          backgroundImage: `url('/foreground-texture-low-res.jpg')`,
+          backgroundImage: `url('/foreground-texture-low-res-2.webp')`,
           backgroundSize: '100%',
           backgroundRepeat: 'repeat',
           transform: 'scaleX(-1)'
