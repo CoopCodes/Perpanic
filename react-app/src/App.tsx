@@ -1,5 +1,5 @@
 import './index.css'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { HomepageHero } from './components/Sections/HomepageHero'
 import { MerchSection } from './components/Sections/MerchSection'
 import { GallerySection } from './components/Sections/GallerySection'
@@ -23,9 +23,9 @@ function App() {
     };
   }, []);
 
-  const merchItems = Array(8).fill(null).map((_, index) => (
+  const merchItems = useMemo(() => Array(8).fill(null).map((_, index) => (
     <img key={index} src="/Merch Image.png" loading='lazy' alt={`Merch Item ${index + 1}`} className="w-[300px] sm:w-[480px] h-full object-cover flex-shrink-0" />
-  ));
+  )), []);
 
   // Generate 8 random events with random names and dates, using the same images
   const randomEventNames = [
