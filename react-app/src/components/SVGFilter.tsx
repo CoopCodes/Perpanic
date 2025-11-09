@@ -50,11 +50,20 @@ export function SVGFilter({ children, className, ref, template = defaultSVGFilte
   useEffect(() => {
     if (!animate) return
 
-    const interval = setInterval(() => {
-      setCurrentSeed(prev => prev >= MAX_SEED ? 0 : prev + 1)
-    }, ANIMATION_INTERVAL);
+    let animationFrameId: number;
+    let lastUpdate = Date.now();
 
-    return () => clearInterval(interval)
+    const updateSeed = () => {
+      const now = Date.now();
+      if (now - lastUpdate >= ANIMATION_INTERVAL) {
+        setCurrentSeed(prev => prev >= MAX_SEED ? 0 : prev + 1);
+        lastUpdate = now;
+      }
+      animationFrameId = requestAnimationFrame(updateSeed);
+    };
+
+    animationFrameId = requestAnimationFrame(updateSeed);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [animate])
 
   return (
