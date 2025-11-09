@@ -8,9 +8,9 @@ interface HomepageHeroProps {  }
 export function HomepageHero({ }: HomepageHeroProps) {
   const linksRef = useRef<HTMLDivElement>(null)
   const animationFrameRef = useRef<number | undefined>(undefined)
-  const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseLinkIndex, setMouseLinkIndex] = useState(-1);
   const [mouseDistanceFromLink, setMouseDistanceFromLink] = useState(0);
+  const lastUpdateRef = useRef({ linkIndex: -1, distance: 0 });
 
   const updateMouseInteraction = useCallback((mouseX: number, mouseY: number) => {
     const links = linksRef.current;
@@ -70,11 +70,14 @@ export function HomepageHero({ }: HomepageHeroProps) {
       }
     }
 
-    // Update state (this will trigger React re-render)
-    setMousePosition({ x: mouseX, y: mouseY });
-    setMouseLinkIndex(newMouseLinkIndex);
-    setMouseDistanceFromLink(distanceToLink);
-  }, [setMousePosition, setMouseLinkIndex, setMouseDistanceFromLink]);
+    // Only update state if values actually changed (reduce re-renders)
+    if (lastUpdateRef.current.linkIndex !== newMouseLinkIndex || 
+        Math.abs(lastUpdateRef.current.distance - distanceToLink) > 10) {
+      lastUpdateRef.current = { linkIndex: newMouseLinkIndex, distance: distanceToLink };
+      setMouseLinkIndex(newMouseLinkIndex);
+      setMouseDistanceFromLink(distanceToLink);
+    }
+  }, []);
 
   useEffect(() => {
     function handleMouseMove(e: MouseEvent) {
@@ -105,7 +108,7 @@ export function HomepageHero({ }: HomepageHeroProps) {
 
   return (
     <>
-      <div className={`bg-[url('/hero-image.jpg')] bg-cover bg-center absolute left-0 right-0 top-0 h-[100vh] z-0`}></div>
+      <div className={`bg-[url('/hero-image.webp')] bg-cover bg-center absolute left-0 right-0 top-0 h-[100vh] z-0`}></div>
       <div className="container relative z-1 max-lg:h-[80vh] lg:h-[100vh] flex !max-w-[1820px]">
         <div className="max-lg:mt-auto w-full flex flex-col gap-[38px] md:gap-[160px] md:items-center lg:grid lg:grid-cols-2">
           <img src={logo} alt="logo" className="hero-logo w-[80%] min-w-[245px] h-auto invert drop-shadow-[0px_0px_160.1px_rgba(255,0,0,0.9)] lg:min-w-[450px]"/>

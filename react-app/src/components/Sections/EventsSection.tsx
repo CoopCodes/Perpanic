@@ -58,6 +58,7 @@ export function EventsSection({ events }: EventsSectionProps) {
                     className={`h-[422px] w-[270px] object-cover transition-opacity ease-in-out duration-200 ${fade === 'in' ? 'opacity-100' : 'opacity-0'}`}
                     src={events[eventIndex].images[2]}
                     alt="test"
+                    loading="lazy"
                 />
                 <div className='h-fit w-full max-lg:mt-6'>
                     <div className="flex pb-3 border-b-1 items-end mb-6 max-md:flex-col max-md:items-start">
