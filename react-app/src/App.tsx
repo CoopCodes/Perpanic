@@ -5,6 +5,7 @@ import { MerchSection } from './components/Sections/MerchSection'
 import { GallerySection } from './components/Sections/GallerySection'
 import { EventsSection } from './components/Sections/EventsSection'
 import type { EventModel } from './models/eventModel'
+import { FormSection } from './components/Sections/FormSection'
 
 function App() {
   const [scrollTop, setScrollTop] = useState(0);
@@ -78,6 +79,7 @@ function App() {
       <MerchSection items={merchItems} />
       <GallerySection events={events.current}/>
       <EventsSection events={events.current} />
+      <FormSection />
       <div className="h-[100vh] container relative bg-textured-black"></div>
     </div>
   )
