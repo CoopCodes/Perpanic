@@ -82,7 +82,7 @@ export function EventsSection({ events }: EventsSectionProps) {
                                 onMouseEnter={() => handleMouseEnter(index)}
                                 onMouseLeave={handleMouseLeave}
                             >
-                                <h3 className={`p1 uppercase text-lg lg:text-2xl text-nowrap transition-all sm:w-fit duration-200 text-ellipsis max-sm:overflow-hidden max-sm:min-w-[160px] ${eventIndex === index ? 'underline mb-1 text-xl lg:text-[28px] font-[600]' : ''}`}>{event.title}</h3>
+                                <h3 className={`p1 text-lg lg:text-3xl text-nowrap transition-all sm:w-fit duration-200 text-ellipsis max-sm:overflow-hidden max-sm:min-w-[160px] ${eventIndex === index ? 'underline mb-1 text-xl lg:text-[28px] font-[600]' : ''}`}>{event.title}</h3>
                                 <svg
                                     className="mx-4 flex-grow w-full h-px max-sm:min-w-[10px]"
                                     preserveAspectRatio="none"
