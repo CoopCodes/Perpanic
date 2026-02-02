@@ -40,7 +40,7 @@ export function DropdownInput({
         <div className="flex gap-4">
             <label className="p1 whitespace-nowrap" htmlFor={selectId}>
                 {label}
-                {mandatory ? "" : ""}
+                {mandatory ? "*" : ""}
             </label>
             <select
                 id={selectId}

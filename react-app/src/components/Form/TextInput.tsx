@@ -36,7 +36,7 @@ export function TextInput({
         <div className="flex gap-4">
             <label className="p1 whitespace-nowrap" htmlFor={inputId}>
                 {label}
-                {mandatory ? "" : ""}
+                {mandatory ? "*" : ""}
             </label>
             <input
                 id={inputId}

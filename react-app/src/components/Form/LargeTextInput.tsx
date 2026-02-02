@@ -42,7 +42,7 @@ export function LargeTextInput({
             {label && (
                 <label className="p1 whitespace-nowrap" htmlFor={textareaId}>
                     {label}
-                    {mandatory ? "" : ""}
+                    {mandatory ? "*" : ""}
                 </label>
             )}
             <textarea

@@ -9,4 +9,3 @@ declare const console: {
     warn: (...args: unknown[]) => void;
 };
 
-

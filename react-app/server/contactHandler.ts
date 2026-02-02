@@ -85,7 +85,7 @@ export async function handleContact(
 
     const shouldMock =
         process.env.CONTACT_DEV_MODE === "true" ||
-        (!process.env.RESEND_API_KEY && process.env.NODE_ENV !== "production");
+        !process.env.RESEND_API_KEY;
 
     const missingField = REQUIRED_FIELDS.find(
         (field) => normalised[field].length === 0
@@ -97,6 +97,8 @@ export async function handleContact(
             body: { error: "Missing required fields." },
         };
     }
+
+    console.log(shouldMock, process.env.CONTACT_DEV_MODE, process.env.RESEND_API_KEY);
 
     if (shouldMock) {
         console.info(
@@ -146,14 +148,18 @@ export async function handleContact(
         <p>${safeMessage || "—"}</p>
     `;
 
+    console.log(emailHtml);
+
     try {
         await resend.emails.send({
             from,
             to: recipients,
-            reply_to: email,
-            subject: `New contact from ${fullName}`,
+            replyTo: email,
+            subject: `Perpanic Booking Request from ${fullName}`,
             html: emailHtml,
         });
+
+        console.log("Email sent successfully");
 
         return {
             status: 200,
