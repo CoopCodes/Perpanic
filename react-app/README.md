@@ -33,10 +33,10 @@ CONTACT_DEV_MODE=true
 ### 1. Netlify (mirrors staging)
 
 ```bash
-cd react-app
 npx netlify-cli@latest dev
 ```
 
+- Run this from the **repo root** (not `react-app/`). The repo-root `netlify.toml` is configured to run the Vite app in `react-app/` and load functions from `react-app/netlify/functions`.
 - Netlify Dev will start Vite and the Functions runtime (usually on `http://localhost:8888`).
 - The SPA continues to call `/api/contact`; Netlify automatically proxies the request to `/.netlify/functions/contact`.
 - Logs for the serverless function appear in the Netlify terminal session. When `CONTACT_DEV_MODE=true`, the handler prints the mocked email payload there.

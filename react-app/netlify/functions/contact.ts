@@ -27,9 +27,7 @@ const createResponse = (
     body: JSON.stringify(body),
 });
 
-export const handler = async (
-    event: NetlifyEvent
-): Promise<NetlifyResponse> => {
+export const handler = async (event: NetlifyEvent): Promise<NetlifyResponse> => {
     if (event.httpMethod === "OPTIONS") {
         return {
             statusCode: 204,
@@ -54,3 +52,4 @@ export const handler = async (
     const result = await handleContact(payload);
     return createResponse(result.status, result.body);
 };
+
