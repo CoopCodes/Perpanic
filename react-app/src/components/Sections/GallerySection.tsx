@@ -14,7 +14,7 @@ export function GallerySection({ events }: GallerySectionProps) {
                 <SVGFilter animate={true}>
                     <h2 className='h2 leading-none'>gallery</h2>
                 </SVGFilter>
-                <ArrowButton title="see all" href="#" />
+                <ArrowButton title="see all" href="/gallery" />
             </div>
             <div className="flex flex-wrap overflow-y-hidden gap-4 col-span-2 lg:justify-end max-lg:order-first max-lg:mt-12 max-sm:w-[480px]">
                 {events.map((event, index) => (
