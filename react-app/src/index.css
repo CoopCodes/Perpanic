@@ -91,9 +91,10 @@
   }
 
   .bg-textured-black::before {
-    @apply absolute top-0 bottom-0 left-1/2 bg-cover md:bg-contain;
+    @apply absolute top-0 bottom-0 left-1/2;
     content: '';
     width: 110vw;
+    min-width: 1920px;
     transform: translateX(-50%);
     pointer-events: none;
     background-image: 
@@ -101,6 +102,7 @@
       rgba(0, 0, 0, 0.35)), 
       url('/foreground-texture-low-res-3.webp'), 
       linear-gradient(black, black);
+    background-size: 100vh 1920px;
     /* background-size: contain; */
     background-repeat: repeat;
     z-index: 0;
