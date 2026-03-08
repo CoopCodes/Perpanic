@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { useSwipeable } from 'react-swipeable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { SVGFilter, defaultSVGFilterTemplate } from '../components/SVGFilter'
@@ -84,6 +85,13 @@ export function GalleryPage() {
     },
     []
   )
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: handleNext,
+    onSwipedRight: handlePrev,
+    delta: 50,
+    trackTouch: true,
+  })
 
   return (
     <>
@@ -177,7 +185,10 @@ export function GalleryPage() {
                 >
                   <FontAwesomeIcon icon={faXmark} />
                 </button>
-                <div className="relative z-10 flex w-full max-w-[1100px] h-[95vh] flex-col items-center justify-center gap-6 px-6 py-10 sm:px-10 lg:flex-row lg:items-center lg:justify-center lg:gap-12 lg:px-12">
+                <div
+                  {...swipeHandlers}
+                  className="relative z-10 flex w-full max-w-[1100px] h-[95vh] flex-col items-center justify-center gap-6 px-6 py-10 sm:px-10 lg:flex-row lg:items-center lg:justify-center lg:gap-12 lg:px-12"
+                >
                   <div className="relative max-lg:w-full h-full">
                     <img
                       src={selectedItem.image}
