@@ -21,10 +21,13 @@
 }
 
 @layer base {
+  html,
+  body {
+    overflow-x: clip;
+  }
   body {
     font-family: 'Canterbury', serif;
     color: white;
-    overflow-x: hidden;
     line-height: 1;
   }
 }
