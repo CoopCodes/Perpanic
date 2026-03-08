@@ -167,7 +167,7 @@ export function GalleryPage() {
             selectedItem &&
             createPortal(
               <div
-                className="fixed inset-0 z-[20] flex items-end justify-center"
+                className="fixed inset-0 z-[200] flex min-h-[100vh] min-h-[100dvh] items-center justify-center overflow-y-auto overflow-x-clip"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Gallery image viewer"
