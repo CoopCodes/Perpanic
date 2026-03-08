@@ -6,47 +6,43 @@ import { faChevronLeft, faChevronRight, faXmark } from '@fortawesome/free-solid-
 import { SVGFilter, defaultSVGFilterTemplate } from '../components/SVGFilter'
 import { getEvents } from '../data/events'
 
-interface GalleryItem {
-  image: string
-  title: string
-  date: Date
-  location: string
-}
+type ModalState = { eventIndex: number; imageIndex: number } | null
 
 export function GalleryPage() {
   const events = useMemo(() => getEvents(), [])
-  const galleryItems = useMemo(() => {
-    return events.flatMap((event) =>
-      event.images.map((image) => ({
-        image,
-        title: event.title,
-        date: event.date,
-        location: event.location,
-      }))
-    )
-  }, [events])
-
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const showModal = selectedIndex !== null
-  const selectedItem = showModal ? galleryItems[selectedIndex!] : null
+  const [modalState, setModalState] = useState<ModalState>(null)
+  const showModal = modalState !== null
+  const selectedEvent = showModal ? events[modalState.eventIndex] : null
+  const selectedItem = showModal
+    ? {
+        image: selectedEvent!.images[modalState!.imageIndex],
+        title: selectedEvent!.title,
+        date: selectedEvent!.date,
+        location: selectedEvent!.location,
+      }
+    : null
+  const currentEventImages = selectedEvent?.images ?? []
+  const currentImageIndex = modalState?.imageIndex ?? 0
 
   const closeModal = useCallback(() => {
-    setSelectedIndex(null)
+    setModalState(null)
   }, [])
 
   const handlePrev = useCallback(() => {
-    setSelectedIndex((prev) => {
-      if (prev === null) return 0
-      return (prev - 1 + galleryItems.length) % galleryItems.length
+    setModalState((prev) => {
+      if (prev === null || currentEventImages.length === 0) return prev
+      const nextIndex = (prev.imageIndex - 1 + currentEventImages.length) % currentEventImages.length
+      return { ...prev, imageIndex: nextIndex }
     })
-  }, [galleryItems.length])
+  }, [currentEventImages.length])
 
   const handleNext = useCallback(() => {
-    setSelectedIndex((prev) => {
-      if (prev === null) return 0
-      return (prev + 1) % galleryItems.length
+    setModalState((prev) => {
+      if (prev === null || currentEventImages.length === 0) return prev
+      const nextIndex = (prev.imageIndex + 1) % currentEventImages.length
+      return { ...prev, imageIndex: nextIndex }
     })
-  }, [galleryItems.length])
+  }, [currentEventImages.length])
 
   useEffect(() => {
     if (!showModal) return
@@ -75,15 +71,15 @@ export function GalleryPage() {
     }
   }, [showModal, closeModal, handleNext, handlePrev])
 
-  const handleImageClick = useCallback((index: number) => {
-    setSelectedIndex(index)
+  const handleImageClick = useCallback((eventIndex: number, imageIndex: number) => {
+    setModalState({ eventIndex, imageIndex })
   }, [])
 
   const handleGridKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLDivElement>, index: number) => {
+    (event: ReactKeyboardEvent<HTMLDivElement>, eventIndex: number, imageIndex: number) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault()
-        setSelectedIndex(index)
+        setModalState({ eventIndex, imageIndex })
       }
     },
     []
@@ -95,7 +91,7 @@ export function GalleryPage() {
         className="absolute inset-0 z-[100] mix-blend-lighten pointer-events-none transition-opacity"
         style={{
           backgroundImage: `url('/foreground-texture-low-res-2.webp')`,
-          backgroundSize: '100%',
+          backgroundSize: 'contain',
           backgroundRepeat: 'repeat',
           transform: 'scaleX(-1)',
           opacity: showModal ? 0.3 : 0.5,
@@ -106,46 +102,57 @@ export function GalleryPage() {
           <div className="mb-6 sm:mb-8">
             <SVGFilter animate={true}>
               <h1 className="h2-sm lg:text-[5.5rem] leading-none">Gallery</h1>
+              <hr className="w-full border-white my-3 md:my-4 border-[1.5px]" />
             </SVGFilter>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6 lg:gap-3">
-            {galleryItems.map((item, index) => (
-              <div
-                key={`${item.image}-${index}`}
-                className="relative overflow-hidden bg-black group cursor-pointer"
-                onClick={() => handleImageClick(index)}
-                onKeyDown={(event) => handleGridKeyDown(event, index)}
-                role="button"
-                tabIndex={0}
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="h-full w-full object-cover aspect-[4/6]"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
-                    <SVGFilter
-                      animate={true}
-                      template={{
-                        ...defaultSVGFilterTemplate,
-                        scale: 1,
-                      }}
+          <div className="flex flex-col gap-10 sm:gap-12 lg:gap-14">
+            {events.map((event, eventIndex) => (
+              <section key={event.location + eventIndex}>
+                <SVGFilter animate={true} className="mb-4 sm:mb-6">
+                  <h2 className="h2-sm text-[2.5rem] leading-none sm:text-[3rem] lg:text-[4rem]">
+                    {event.location}
+                  </h2>
+                </SVGFilter>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5 lg:gap-3">
+                  {event.images.map((image, imageIndex) => (
+                    <div
+                      key={`${image}-${imageIndex}`}
+                      className="relative overflow-hidden bg-black group cursor-pointer"
+                      onClick={() => handleImageClick(eventIndex, imageIndex)}
+                      onKeyDown={(e) => handleGridKeyDown(e, eventIndex, imageIndex)}
+                      role="button"
+                      tabIndex={0}
                     >
-                      <h3 className="text-white text-xl sm:text-4xl tracking-[-0.04em] line-clamp-2 mb-1 leading-[100%]">
-                        {item.title}
-                      </h3>
-                      <p className="text-white arial text-sm sm:text-base">
-                        {item.date.toLocaleDateString()}
-                      </p>
-                    </SVGFilter>
-                  </div>
+                      <img
+                        src={image}
+                        alt={event.title}
+                        className="h-full w-full object-cover aspect-[4/6]"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
+                          <SVGFilter
+                            animate={true}
+                            template={{
+                              ...defaultSVGFilterTemplate,
+                              scale: 1,
+                            }}
+                          >
+                            <h3 className="text-white text-xl sm:text-4xl tracking-[-0.04em] line-clamp-2 mb-1 leading-[100%]">
+                              {event.title}
+                            </h3>
+                            <p className="text-white arial text-sm sm:text-base">
+                              {event.date.toLocaleDateString()}
+                            </p>
+                          </SVGFilter>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
+              </section>
             ))}
-            <div className="hidden lg:block lg:col-span-3" aria-hidden="true"></div>
           </div>
 
           {showModal &&
@@ -202,7 +209,7 @@ export function GalleryPage() {
                       </button>
                       <SVGFilter animate={true} template={{ ...defaultSVGFilterTemplate, scale: 1 }}>
                         <span className="arial text-sm text-white">
-                          {selectedIndex! + 1} / {galleryItems.length}
+                          {currentImageIndex + 1} / {currentEventImages.length}
                         </span>
                       </SVGFilter>
                       <button
