@@ -5,6 +5,7 @@ import { useSwipeable } from 'react-swipeable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { SVGFilter, defaultSVGFilterTemplate } from '../components/SVGFilter'
+import { FooterSection } from '../components/Sections/FooterSection'
 import { getEvents } from '../data/events'
 
 type ModalState = { eventIndex: number; imageIndex: number } | null
@@ -106,7 +107,7 @@ export function GalleryPage() {
         }}
       ></div>
       <div className="main-content relative min-h-screen bg-textured-black">
-        <div className="container relative min-h-screen pt-[150px] pb-14 lg:pb-16">
+        <div className="container relative min-h-screen pt-[250px] pb-14 lg:pb-16">
           <div className="mb-6 sm:mb-8">
             <SVGFilter animate={true}>
               <h1 className="h2-sm lg:text-[5.5rem] leading-none">Gallery</h1>
@@ -238,6 +239,7 @@ export function GalleryPage() {
               document.body
             )}
         </div>
+        <FooterSection />
       </div>
     </>
   )

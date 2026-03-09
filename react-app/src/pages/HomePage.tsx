@@ -4,6 +4,7 @@ import { MerchSection } from '../components/Sections/MerchSection'
 import { GallerySection } from '../components/Sections/GallerySection'
 import { EventsSection } from '../components/Sections/EventsSection'
 import { FormSection } from '../components/Sections/FormSection'
+import { FooterSection } from '../components/Sections/FooterSection'
 import { getEvents } from '../data/events'
 
 export function HomePage() {
@@ -56,7 +57,7 @@ export function HomePage() {
       <GallerySection events={events.current} />
       <EventsSection events={events.current} />
       <FormSection />
-      <div className="h-[100vh] container relative bg-textured-black" />
+      <FooterSection />
     </div>
   )
 }

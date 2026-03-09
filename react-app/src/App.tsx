@@ -1,5 +1,6 @@
 import './index.css'
 import { Link, Route, Switch } from 'wouter'
+import { HeaderNav } from './components/HeaderNav'
 import { HomePage } from './pages/HomePage'
 import { GalleryPage } from './pages/GalleryPage'
 
@@ -16,11 +17,14 @@ function NotFound() {
 
 function App() {
   return (
-    <Switch>
-      <Route path="/" component={HomePage} />
-      <Route path="/gallery" component={GalleryPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <HeaderNav />
+      <Switch>
+        <Route path="/" component={HomePage} />
+        <Route path="/gallery" component={GalleryPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
   )
 }
 

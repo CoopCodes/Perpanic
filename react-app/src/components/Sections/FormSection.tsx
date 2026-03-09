@@ -253,7 +253,7 @@ export function FormSection() {
     };
 
     return (
-        <div className="container relative bg-textured-black h-[100vh] py-20">
+        <div id="contact" className="container relative bg-textured-black py-20">
             <SVGFilter animate={true} className="mx-auto lg:px-6 lg:max-w-[1314px]">
                 <h2 className='h2-sm mb-3 md:mb-5'>{formConfig.title}</h2>
                 <hr className="mb-3 md:mb-5 border-1 border-gray-100"></hr>
