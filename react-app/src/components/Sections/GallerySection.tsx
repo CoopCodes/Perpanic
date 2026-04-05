@@ -17,9 +17,9 @@ export function GallerySection({ events }: GallerySectionProps) {
                 <ArrowButton title="see all" href="/gallery" />
             </div>
             <div className="flex flex-wrap overflow-y-hidden gap-4 col-span-2 lg:justify-end max-lg:order-first max-lg:mt-12 max-sm:w-[480px]">
-                {events.map((event, index) => (
+                {events[0].images.map((image, index) => (
                     <div key={index} className="relative group h-[calc(50%-1rem)]">
-                        <img src={event.images[0]} alt={event.title} className="h-full object-cover aspect-[420/629]" loading="lazy" />
+                        <img src={image} alt={events[0].title} className="h-full object-cover aspect-[420/629]" loading="lazy" />
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-0 group-hover:opacity-100 transition-opacity">
                             <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4">
                                 <SVGFilter
@@ -28,8 +28,8 @@ export function GallerySection({ events }: GallerySectionProps) {
                                     ...defaultSVGFilterTemplate,
                                     scale: 1,
                                 }}>
-                                    <h3 className="text-white text-xl sm:text-4xl tracking-[-0.04em] line-clamp-2 mb-1 leading-[100%]">{event.title}</h3>
-                                    <p className="text-white arial text-sm sm:text-base">{event.date.toLocaleDateString()}</p>
+                                    <h3 className="text-white text-xl sm:text-4xl tracking-[-0.04em] line-clamp-2 mb-1 leading-[100%]">{events[0].title}</h3>
+                                    <p className="text-white arial text-sm sm:text-base">{events[0].date.toLocaleDateString()}</p>
                                 </SVGFilter>
                             </div>
                         </div>

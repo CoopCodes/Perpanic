@@ -118,10 +118,13 @@ export function GalleryPage() {
           <div className="flex flex-col gap-10 sm:gap-12 lg:gap-14">
             {events.map((event, eventIndex) => (
               <section key={event.location + eventIndex}>
-                <SVGFilter animate={true} className="mb-4 sm:mb-6">
-                  <h2 className="h2-sm text-[2.5rem] leading-none sm:text-[3rem] lg:text-[4rem]">
+                <SVGFilter animate={true} className="mb-4 sm:mb-6 flex items-end md:gap-4">
+                  <h2 className="h2-sm leading-none text-[3rem] lg:text-[4rem]">
                     {event.location}
                   </h2>
+                  <p className="text-white arial text-base sm:text-lg mb-0.5 md:mb-0.5 ml-auto md:ml-0">
+                    {event.date.toLocaleDateString()}
+                  </p>
                 </SVGFilter>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5 lg:gap-3">
                   {event.images.map((image, imageIndex) => (
